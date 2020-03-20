@@ -1,7 +1,7 @@
 function u = controller(t, delta_t, value_light_sensor)
-    u = [0;0];
-    if t>0 & t<1
-        u = [0.8;0.8];
+    u = [0.4;0];
+    if value_light_sensor(1,1) >100
+        u = [0;0.4];
     end
     
 end
