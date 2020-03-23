@@ -3,5 +3,4 @@ function u = controller(t, delta_t, value_light_sensor)
     if value_light_sensor(1,1) >100
         u = [0;0.4];
     end
-    
 end
