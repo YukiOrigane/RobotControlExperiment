@@ -1,8 +1,16 @@
-run("robot.m");
+
 
 [field_size, field_line, field_wall] = setField();
+
 drawInit(field_size);
-drawField(field_size, field_line, field_wall);
+
+field_image = cat(3,field_line,field_line,field_line);
+field_image(
+field_image(:,:,2) = field_image(:,:,1) - field_wall.*200;
+field_image(:,:,3) = field_image(:,:,3) - field_wall.*200;
+field_image = rescale(field_image);
+imshow(field_image);
+% imshow(field_line, 'DisplayRange', [0 255]);
 
 field_line = field_line.';
 field_wall = field_wall.';
