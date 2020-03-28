@@ -8,14 +8,13 @@ function check = checkRobotPosition(q, body, field_size, wall)
         y = gpos_point(2,i);
         if x<1 || y<1 || x>field_size(1,1) || y>field_size(1,2)
             check = -1;
+            disp("ロボットがフィールド外に出ました");
             break
         end
         if wall(x,y) == 1
             check = -1;
+            disp("ロボットが壁に衝突しました");
             break;
         end
-    end
-    if check == -1
-        disp("ロボットがフィールド外に出たか，壁と接触しました");
     end
 end
