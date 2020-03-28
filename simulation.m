@@ -23,11 +23,12 @@ state_robot = init_state;
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 
 delta_t = 0.01;
-N = 500;
+N = 2000;
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
 u = zeros(N, 2);
+simulation_cond = 1;    % é¿çs
 
 for k = 1:N
     q(k,:) = state_robot;
@@ -38,6 +39,10 @@ for k = 1:N
         control_input = controller(t(k,1), delta_t, value_light_sensor);
     end
     state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
+    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall);
+    if simulation_cond<0    % âΩÇÁÇ©ÇÃèIóπå¥àˆÇ™ê∂Ç∂ÇΩ
+        break;
+    end
     drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
     pause(delta_t);

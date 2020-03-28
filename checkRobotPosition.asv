@@ -1,0 +1,21 @@
+function check = checkRobotPosition(q, body, field_size, wall)
+    theta = q(3,1);
+    gpos_point = round( [cos(theta) -sin(theta); sin(theta) cos(theta)] * [body; body(1,:)].' + q(1:2,1)*ones(1,5) );
+    gpos_point(:,5) = round( q(1:2,1) );
+    for i=1:5
+        x = gpos_point(1,i);
+        y = gpos_point(2,i);
+        if x>1 || y>1 || x<field_size(1,1) || y<field_size(1,2)
+            check = 1;
+        elseif wall(x,y) == 0
+            check = 1;
+        else
+        end
+        flag = flag | wall(x,y)==1;
+        if flag == 1
+            check = -1;
+            disp("ロボットがフィールド外に出たか，壁と接触しました");
+            break;
+        end
+    end
+end
