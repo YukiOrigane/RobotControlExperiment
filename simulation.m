@@ -1,6 +1,9 @@
 run("robot.m");
 
-[field_size, field_line, field_wall] = setField();
+field_folder = "01_straight_line";
+
+load( strcat("fields/" , field_folder, "/", "field") );
+% [field_size, field_line, field_wall] = setField(folder);
 drawInit(field_size);
 
 drawField(field_size, field_line, field_wall);
@@ -14,7 +17,8 @@ range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_r
 range_sensor_line = line;
 range_detect_points = zeros(2, size(range_sensor_points,2));
 
-state_robot = [200;500;0];  % gposX, gposY, gtheta
+% state_robot = [200;500;0];  % gposX, gposY, gtheta
+state_robot = init_state;
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 
 delta_t = 0.01;
