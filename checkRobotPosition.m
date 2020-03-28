@@ -1,6 +1,7 @@
-function check = checkRobotPosition(q, body, field_size, wall)
+function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
     check = 1;
     theta = q(3,1);
+    in_finish_zone = 0;
     gpos_point = round( [cos(theta) -sin(theta); sin(theta) cos(theta)] * [body; body(1,:)].' + q(1:2,1)*ones(1,5) );
     gpos_point(:,5) = round( q(1:2,1) );
     for i=1:5
@@ -16,5 +17,12 @@ function check = checkRobotPosition(q, body, field_size, wall)
             disp("ロボットが壁に衝突しました");
             break;
         end
+        if vecnorm( [x;y]-finish_zone(1:2,1) ) < finish_zone(3,1)
+            in_finish_zone = in_finish_zone + 1;
+        end
+    end
+    if in_finish_zone == 5
+        disp("ロボットが終了エリアに入りました");
+        check = -1;
     end
 end

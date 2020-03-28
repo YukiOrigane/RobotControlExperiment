@@ -12,7 +12,8 @@ field_wall = field_wall.';
 
 body_line = line;
 time_display = text(0, 30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
-condition_display = text(200, 30, "大気中
+condition_display = text(600, 30, "待機中", 'Fontsize', 20);
+
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
 range_sensor_line = line;
@@ -24,7 +25,7 @@ state_robot = init_state;
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 
 delta_t = 0.01;
-wait_N = -200;  % 開始までの時間
+wait_N = -50;  % 開始までの時間
 N = 2000;       % シミュレーション最大時間
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
@@ -34,6 +35,7 @@ simulation_cond = 1;    % 実行
 
 for k = wait_N:1:N
     if k>0
+        condition_display.String = "スタート";
         q(k,:) = state_robot;
         u(k,:) = control_input;
         if mod(k,5) == 0    % 20Hz
@@ -43,7 +45,7 @@ for k = wait_N:1:N
         end
     end
     state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
-    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall);
+    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % 何らかの終了原因が生じた
         break;
     end
@@ -51,6 +53,10 @@ for k = wait_N:1:N
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
     pause(delta_t);
     drawnow limitrate
+end
+
+if simulation_cond == 1
+    disp("シミュレーション時間が終了しました");
 end
 
 figure

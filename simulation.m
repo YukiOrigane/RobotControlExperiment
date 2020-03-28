@@ -6,7 +6,7 @@ load( strcat("fields/" , field_folder, "/", "field") );
 % [field_size, field_line, field_wall] = setField(folder);
 drawInit(field_size);
 
-drawField(field_size, field_line, field_wall);
+drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
@@ -44,7 +44,7 @@ for k = wait_N:1:N
         end
     end
     state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
-    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall);
+    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % ‰½‚ç‚©‚ÌI—¹Œ´ˆö‚ª¶‚¶‚½
         break;
     end
