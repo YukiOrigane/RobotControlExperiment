@@ -9,13 +9,13 @@ field_line = ones(field_size(1,2), field_size(1,1)).*252;   % 白っぽい色に初期化
 field_wall = zeros(field_size(1,2), field_size(1,1));       % 0（壁なし）に初期化
 
 % MATLAB上で作成
-
+%{
 field_line(485:515,:) = 20; % 指定部分のみ黒線に変更
 field_wall(10:990,1500:1520) = 1;   % 指定部分のみ１（壁あり）に変更
-
+%}
 
 % 画像ファイルを読み込み作成
-%{
+
 image = imread("field_data.png");
 
 field_line = image(:,:,3);  % ラインは画像のB値を使う
@@ -31,7 +31,7 @@ for i=1:field_size(1,2)
         end
     end
 end
-%}
+
 
 % データをファイルに出力
 save("field");

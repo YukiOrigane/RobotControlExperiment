@@ -1,6 +1,6 @@
 run("robot.m");
 
-field_folder = "01_straight_line";
+field_folder = "02_line_and_circle";
 
 load( strcat("fields/" , field_folder, "/", "field") );
 % [field_size, field_line, field_wall] = setField(folder);
