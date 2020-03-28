@@ -11,7 +11,7 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
             pos(:,i) = pos(:,i) + [cos(direction); sin(direction)]; % 波の進行
             x = round(pos(1,i));
             y = round(pos(2,i));
-            if x > field_size(1,1) || x < 1 || y > field_size(1,2) || y < 1
+            if x > field_size(1,1) || x < 1 || y > field_size(1,2) || y < 0
                 detect_points(:,i) = [x; y];
                 break; % 捜索範囲がフィールド超えた
             end
