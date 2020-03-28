@@ -14,10 +14,11 @@ field_wall(10:990,1500:1520) = 1;   % 指定部分のみ１（壁あり）に変更
 
 % 画像ファイルを読み込み作成
 %{
-image = imload("field_data.png");
+image = imread("field_data.png");
 
 field_line = image(:,:,3);  % ラインは画像のB値を使う
 field_wall = image(:,:,1);  % 壁は画像のR値を使う
+field_line = 255 - field_line;
 for i=1:field_size(1,2)
     for j = 1:field_size(1,1)
         if field_wall(i,j)>0
