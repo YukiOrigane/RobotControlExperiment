@@ -10,7 +10,7 @@ field_wall = zeros(field_size(1,2), field_size(1,1));       % 0i•Ç‚È‚µj‚É‰Šú‰
 
 % MATLABã‚Åì¬
 field_line(485:515,:) = 20; % Žw’è•”•ª‚Ì‚Ý•ü‚É•ÏX
-field_wall(10:990,1500:1520) = 1;   % Žw’è•”•ª‚Ì‚Ý‚Pi•Ç‚ ‚èj‚É•ÏX
+% field_wall(10:990,1500:1520) = 1;   % Žw’è•”•ª‚Ì‚Ý‚Pi•Ç‚ ‚èj‚É•ÏX
 
 % ‰æ‘œƒtƒ@ƒCƒ‹‚ð“Ç‚Ýž‚Ýì¬
 %{

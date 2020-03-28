@@ -1,5 +1,5 @@
 
-function drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points,list_range_sensor, range_detect_points, range_sensor_line)
+function drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points,list_range_sensor, range_sensor_points, range_detect_points, range_sensor_line)
     theta = state_robot(3,1);
     light_sensor_N = size(list_light_sensor,1);
     range_sensor_N = size(list_range_sensor,1);
@@ -13,9 +13,9 @@ function drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor
         light_sensor_points(i).Position = [gpos_line(1,i) gpos_line(2,i)];
     end
     for i = 1:range_sensor_N
-        range_sensor_line.XData = [ gpos_range(1,i) range_detect_points(1,i) ];
-        range_sensor_line.YData = [ gpos_range(2,i) range_detect_points(2,i) ];
-        range_sensor_line.Color = 'g';
+        range_sensor_points(i).Position = [gpos_range(1,i) gpos_range(2,i)];
+        range_sensor_line(i).XData = [ gpos_range(1,i) range_detect_points(1,i) ];
+        range_sensor_line(i).YData = [ gpos_range(2,i) range_detect_points(2,i) ];
+        range_sensor_line(i).Color = 'g';
     end
-    % line(gpos_body(:,1), gpos_body(:,2));
 end

@@ -30,6 +30,6 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
        end
     end
     
-    % val = val + 10 * randn; % ƒmƒCƒY•t—^
-    disp(val)
+    val = val + 10 * randn; % ƒmƒCƒY•t—^
+    % disp(val)
 end

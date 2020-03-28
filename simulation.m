@@ -1,6 +1,6 @@
 run("robot.m");
 
-field_folder = "02_line_and_circle";
+field_folder = "01_straight_line";
 
 load( strcat("fields/" , field_folder, "/", "field") );
 % [field_size, field_line, field_wall] = setField(folder);
@@ -15,6 +15,7 @@ time_display = text(0, 30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), 'ÅZ', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
 range_sensor_line = line;
+range_sensor_line(:).Visible = range_line_visible;
 range_detect_points = zeros(2, size(range_sensor_points,2));
 
 % state_robot = [200;500;0];  % gposX, gposY, gtheta
@@ -37,7 +38,7 @@ for k = 1:N
         control_input = controller(t(k,1), delta_t, value_light_sensor);
     end
     state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
-    drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_detect_points, range_sensor_line);
+    drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
     pause(delta_t);
     drawnow limitrate
