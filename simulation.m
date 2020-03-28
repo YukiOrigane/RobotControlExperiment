@@ -1,6 +1,6 @@
 run("robot.m");
 
-field_folder = "01_straight_line";
+field_folder = "02_line_and_circle";
 
 load( strcat("fields/" , field_folder, "/", "field") );
 % [field_size, field_line, field_wall] = setField(folder);
@@ -40,7 +40,7 @@ for k = wait_N:1:N
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = getLightSensor(state_robot, list_light_sensor, field_line);
             [value_range_sensor, range_detect_points] = getRangeSensor(state_robot, list_range_sensor, field_wall);
-            control_input = controller(t(k,1), delta_t, value_light_sensor);
+            control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
         end
     end
     state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
