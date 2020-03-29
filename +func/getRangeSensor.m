@@ -34,7 +34,7 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
                     theta_d = sign(theta_d) * ( pi-abs(theta_d) );
                 end
                 if abs( pi/2 - abs(theta_d-direction) ) < pi/18 % “üŽËŠp<10‹‚È‚ç‹——£‚ð“n‚·
-                     val(i,1) = j + restrictedRandN(0, 0.01*j, 0.04*j);
+                     val(i,1) = j + func.restrictedRandN(0, 0.01*j, 0.04*j);
                 end
                 break;
             end

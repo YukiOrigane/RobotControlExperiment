@@ -5,7 +5,7 @@ function val = getLightSensor(q, list, line, noise)
     pos = round(pos);
     for i = 1:N
         val(i,1) = line( pos(1,i), pos(2,i) );
-        val(i,1) = val(i,1) + restrictedRandN(0, 8, 24);  % randam noise
+        val(i,1) = val(i,1) + func.restrictedRandN(0, 8, 24);  % randam noise
         val(i,1) = val(i,1) + noise;    % environmental noise (static)
         if val(i,1)>300
             val(i,1) = 300;
