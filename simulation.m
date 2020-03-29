@@ -1,8 +1,8 @@
 clear   % 一旦ワークスペース内全変数を消去
 
-field_number = '01';
+field_number = '02';
 
-run("set_field_list.m");
+run("fields/set_field_list.m");
 field_folder = field_list(field_number);
 
 func.makeField(field_folder);
