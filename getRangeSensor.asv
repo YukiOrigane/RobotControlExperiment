@@ -25,7 +25,7 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
                         val(i,1) = j;
                 else    % •ª‚©‚ç‚¸
                 end
-                val(i,1) = val(i,1) + restrictedRandN(0, 0.01*val(i,1), 0.04*val(i,1));
+                val
                 break;
             end
        end
