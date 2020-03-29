@@ -3,7 +3,7 @@ function u = controller(t, delta_t, value_light_sensor, value_range_sensor)
     % if value_light_sensor(1,1) >100
     %     u = [0;0.4];
     % end
-    disp(value_range_sensor(1,1));
-    u = [0.1;-0.1];
+    % disp(value_range_sensor(1,1));
+    u = [0.5;0.5];
     
 end
