@@ -1,6 +1,11 @@
-run("robot.m");
+clear   % 一旦ワークスペース内全変数を消去
 
-field_folder = "01_straight_line";
+field_number = '01';
+
+run("set_field_list.m");
+field_folder = field_list(field_number);
+
+func.makeField(field_folder);
 
 load( strcat("fields/" , field_folder, "/", "field") );
 % [field_size, field_line, field_wall] = func.setField(folder);
@@ -9,6 +14,8 @@ func.drawInit(field_size);
 func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
+
+run("robot.m");
 
 body_line = line;
 time_display = text(0, 30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
