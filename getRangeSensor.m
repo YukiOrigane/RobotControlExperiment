@@ -11,26 +11,36 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
             pos(:,i) = pos(:,i) + [cos(direction); sin(direction)]; % ”g‚Ìis
             x = round(pos(1,i));
             y = round(pos(2,i));
-            if x > field_size(1,1) || x < 1 || y > field_size(1,2) || y < 1
+            if x > field_size(1,1)-15 || x < 15 || y > field_size(1,2)-15 || y < 15 % 15mm‚ÍCŒX‚«ŒŸo‰~‚Ìƒ}[ƒWƒ“
                 detect_points(:,i) = [x; y];
                 break; % ‘{õ”ÍˆÍ‚ªƒtƒB[ƒ‹ƒh’´‚¦‚½
             end
             if wall( x, y ) == 1
                 detect_points(:,i) = [x; y];
-                if wall(x+1, y)*wall(x-1,y) == 0    % xŽ²‚É‚’¼‚È•Ç
-                    if abs(direction)<pi/18 || abs(direction)>17*pi/18  % “üŽËŠp < ŽU•zŠp
-                        val(i,1) = j;
+                % Õ“ËŠp“x‚ÌŒvŽZ
+                pre_flag_in = 0;
+                for theta = 0:0.01:2*pi % –½’†“_‚ÌŽü‚è‚É”¼Œa12‡o‚Ì‰~Žü‚ð“WŠJ
+                    flag_in = wall(round(x+12*cos(theta)), round(y+12*sin(theta)));
+                    if pre_flag_in == 1 && flag_in == 0 % ‰~Žü‚ª•Ç‚©‚ço‚½
+                        theta_1 = theta;
                     end
-                elseif wall(x, y+1)*wall(x,y-1) == 0    % yŽ²‚É‚’¼‚È•Ç
-                        val(i,1) = j;
-                else    % •ª‚©‚ç‚¸
+                    if pre_flag_in == 0 && flag_in == 1 % ‰~Žü‚ª•Ç‚É“ü‚Á‚½
+                        theta_2 = theta;
+                    end
+                    pre_flag_in = flag_in;
                 end
-                val(i,1) = val(i,1) + restrictedRandN(0, 0.01*val(i,1), 0.04*val(i,1));
+                theta_d = (theta_1 + theta_2 - pi)/2;   % •Ç‚ÌŒX‚«‚ÌŒvŽZ
+                if abs(theta_d) > pi
+                    theta_d = sign(theta_d) * ( pi-abs(theta_d) );
+                end
+                if abs( pi/2 - abs(theta_d-direction) ) < pi/18 % “üŽËŠp<10‹‚È‚ç‹——£‚ð“n‚·
+                     val(i,1) = j + restrictedRandN(0, 0.01*j, 0.04*j);
+                end
                 break;
             end
        end
     end
     
-    val = val + 10 * randn; % ƒmƒCƒY•t—^
+    % val = val + 10 * randn; % ƒmƒCƒY•t—^
     % disp(val)
 end

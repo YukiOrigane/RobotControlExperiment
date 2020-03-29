@@ -1,10 +1,10 @@
 clear   % 一旦ワークスペース内全変数を消去
 
-field_size = [3000, 1000];  % field size [x, y];
+field_size = [3000, 1500];  % field size [x, y];
 
-init_state = [700; 500; 0]; % ロボットの初期状態 [ posx; posy; theta ];
+init_state = [700; 700; 0]; % ロボットの初期状態 [ posx; posy; theta ];
 
-finish_zone = [2700; 500; 100]; % 終了ゾーン [pox; posy; 半径];
+finish_zone = [2670; 630; 250]; % 終了ゾーン [pox; posy; 半径];
 
 % フィールド情報変数初期化
 field_line = ones(field_size(1,2), field_size(1,1)).*252;   % 白っぽい色に初期化
