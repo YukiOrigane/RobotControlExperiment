@@ -1,12 +1,12 @@
 run("robot.m");
 
-field_folder = "02_line_and_circle";
+field_folder = "01_straight_line";
 
 load( strcat("fields/" , field_folder, "/", "field") );
-% [field_size, field_line, field_wall] = setField(folder);
-drawInit(field_size);
+% [field_size, field_line, field_wall] = func.setField(folder);
+func.drawInit(field_size);
 
-drawField(field_size, field_line, field_wall, finish_zone);
+func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
@@ -39,17 +39,17 @@ for k = wait_N:1:N
         q(k,:) = state_robot;
         u(k,:) = control_input;
         if mod(k,5) == 0    % 20Hz
-            value_light_sensor = getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
-            [value_range_sensor, range_detect_points] = getRangeSensor(state_robot, list_range_sensor, field_wall);
+            value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
+            [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
             control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
         end
     end
-    state_robot = robotSystem(state_robot, control_input, wheel, delta_t);
-    simulation_cond = simulation_cond * checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
+    state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
+    simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % ‰½‚ç‚©‚ÌI—¹Œ´ˆö‚ª¶‚¶‚½
         break;
     end
-    drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
+    func.drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
     pause(delta_t);
     drawnow limitrate
