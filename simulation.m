@@ -1,6 +1,6 @@
 clear   % 一旦ワークスペース内全変数を消去
 
-field_number = '01';
+field_number = '03';
 
 run("fields/set_field_list.m");
 field_folder = field_list(field_number);
