@@ -20,8 +20,8 @@ range_sensor_line(:).Visible = range_line_visible;
 range_detect_points = zeros(2, size(range_sensor_points,2));
 
 % state_robot = [200;500;0];  % gposX, gposY, gtheta
-state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
-environmental_light_noise = 40 * (rand-0.5);
+state_robot = init_state + [10*rand-5; 10*rand-5; ];
+control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 
 delta_t = 0.01;
 wait_N = -50;  % äJénÇ‹Ç≈ÇÃéûä‘
@@ -30,7 +30,6 @@ t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
 u = zeros(N, 2);
-control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 simulation_cond = 1;    % é¿çs
 
 for k = wait_N:1:N
@@ -39,7 +38,7 @@ for k = wait_N:1:N
         q(k,:) = state_robot;
         u(k,:) = control_input;
         if mod(k,5) == 0    % 20Hz
-            value_light_sensor = getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
+            value_light_sensor = getLightSensor(state_robot, list_light_sensor, field_line);
             [value_range_sensor, range_detect_points] = getRangeSensor(state_robot, list_range_sensor, field_wall);
             control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
         end
