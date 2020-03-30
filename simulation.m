@@ -68,7 +68,7 @@ for k = wait_N:1:N
     drawnow limitrate
 end
 
-clear controller % for clear perisistent function
+clear controller % for clear perisistent variable
 
 if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
