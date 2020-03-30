@@ -1,8 +1,0 @@
-function val = getLightSensor(q, list, line)
-    N = size(list,1);
-    val = zeros(N,1);
-    pos = [cos(q(3,1)) -sin(q(3,1)); sin(q(3,1)) cos(q(3,1))] * list.' + q(1:2,1*ones(1,N));
-    for i = 1:N
-        val(i,1) = line( pos(1,i), pos(2,i) );
-    end
-end
