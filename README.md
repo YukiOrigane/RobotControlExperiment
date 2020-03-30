@@ -1,4 +1,4 @@
 # RobotControlExperiment
+ver 0.9.0
 ## 基本の使い方
-- robot.mを実行する
 - simulation.mを実行する

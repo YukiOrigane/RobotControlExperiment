@@ -8,7 +8,7 @@ field_folder = field_list(field_number);
 func.makeField(field_folder);
 
 load( strcat("fields/" , field_folder, "/", "field") );
-% [field_size, field_line, field_wall] = func.setField(folder);
+
 func.drawInit(field_size);
 
 func.drawField(field_size, field_line, field_wall, finish_zone);
@@ -18,8 +18,8 @@ field_wall = field_wall.';
 run("robot.m");
 
 body_line = line;
-time_display = text(0, 30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
-condition_display = text(600, 30, "待機中", 'Fontsize', 20);
+time_display = text(0, -30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
+condition_display = text(600, -30, "待機中", 'Fontsize', 20);
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
 range_sensor_line = line;
@@ -32,7 +32,7 @@ environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
 wait_N = -50;  % 開始までの時間
-N = 2000;       % シミュレーション最大時間
+N = 18000;       % シミュレーション最大時間 3min
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
@@ -66,6 +66,6 @@ if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
 end
 
-figure
-plot(q(:,1), q(:,3))
+% figure
+% plot(q(:,1), q(:,3))
 % plot(t, u(:,1), t, u(:,2));
