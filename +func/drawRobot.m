@@ -16,6 +16,6 @@ function drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor
         range_sensor_points(i).Position = [gpos_range(1,i) gpos_range(2,i)];
         range_sensor_line(i).XData = [ gpos_range(1,i) range_detect_points(1,i) ];
         range_sensor_line(i).YData = [ gpos_range(2,i) range_detect_points(2,i) ];
-        range_sensor_line(i).Color = 'g';
+        % range_sensor_line(i).Color = 'g';
     end
 end

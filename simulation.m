@@ -22,9 +22,15 @@ time_display = text(0, -30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
 condition_display = text(600, -30, "待機中", 'Fontsize', 20);
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
-range_sensor_line = line;
-range_sensor_line(:).Visible = range_line_visible;
-range_detect_points = zeros(2, size(range_sensor_points,2));
+for i = 1:size(list_range_sensor,1)
+    range_sensor_line(i) = line;
+    range_sensor_line(i).Visible = range_line_visible;
+    range_sensor_line(i).Color = 'g';
+end
+% range_sensor_line.Visible = repmat(range_line_visible,1,2);
+
+
+range_detect_points = zeros(2, size(list_range_sensor,1));
 
 % state_robot = [200;500;0];  % gposX, gposY, gtheta
 state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
@@ -61,6 +67,8 @@ for k = wait_N:1:N
     pause(delta_t);
     drawnow limitrate
 end
+
+clear controller % for clear perisistent function
 
 if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
