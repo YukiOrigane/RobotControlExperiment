@@ -2,6 +2,8 @@ clear   % 一旦ワークスペース内全変数を消去
 
 field_number = '01';
 
+save_video_name = 'movie';
+
 run("fields/set_field_list.m");
 field_folder = field_list(field_number);
 
@@ -29,7 +31,6 @@ for i = 1:size(list_range_sensor,1)
 end
 % range_sensor_line.Visible = repmat(range_line_visible,1,2);
 
-
 range_detect_points = zeros(2, size(list_range_sensor,1));
 
 % state_robot = [200;500;0];  % gposX, gposY, gtheta
@@ -45,6 +46,7 @@ q = zeros(N, 3);
 u = zeros(N, 2);
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 simulation_cond = 1;    % 実行
+movie_k = 0;
 
 for k = wait_N:1:N
     if k>0
@@ -64,7 +66,14 @@ for k = wait_N:1:N
     end
     func.drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
-    pause(delta_t);
+    if exist('save_video_name', 'var') == 1  % movie作成
+        if mod(k,4) == 1
+            movie_k = movie_k + 1;
+            Movie(movie_k) = getframe(gcf);
+        end
+    else
+        pause(delta_t);
+    end
     drawnow limitrate
 end
 
@@ -77,3 +86,8 @@ end
 % figure
 % plot(q(:,1), q(:,3))
 % plot(t, u(:,1), t, u(:,2));
+
+if exist('save_video_name', 'var') == 1
+    func.makeVideo(save_video_name, Movie);
+end
+
