@@ -1,6 +1,6 @@
 # RobotControlExperiment
 
-ver 0.9.1 <br>
+ver 0.9.3 <br>
 <br>
 ロボット技術研究会の制御体験会用シミュレーションのリポジトリです。<br>
 初めての人は，[wiki](https://github.com/YukiOrigane/RobotControlExperiment/wiki)へどうぞ！
