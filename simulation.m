@@ -80,6 +80,7 @@ for k = wait_N:1:N
 end
 
 clear controller % for clear perisistent variable
+clear checkRobotPosition
 
 if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
