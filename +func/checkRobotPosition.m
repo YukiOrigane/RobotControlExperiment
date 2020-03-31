@@ -1,6 +1,7 @@
 function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
     check = 1;
     theta = q(3,1);
+    pre_q = zeros(3,1);
     in_finish_zone = 0;
     gpos_point = round( [cos(theta) -sin(theta); sin(theta) cos(theta)] * [body; body(1,:)].' + q(1:2,1)*ones(1,5) );
     gpos_point(:,5) = round( q(1:2,1) );
@@ -22,7 +23,13 @@ function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
         end
     end
     if in_finish_zone == 5
-        disp("ロボットが終了エリアに入りました");
-        check = -1;
+        if finish_zone(4,1) == 0    % 侵入でOK
+            disp("ロボットが終了エリアに入りました");
+            check = -1;
+        elseif pre_q == q           % 静止を要求
+            disp("ロボットが終了エリアで停止しました");
+            check = -1;
+        end
+        pre_q = q;
     end
 end
