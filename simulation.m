@@ -20,6 +20,7 @@ field_wall = field_wall.';
 run("robot.m");
 
 body_line = line;
+wheel_line = [line, line];
 time_display = text(0, -30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
 condition_display = text(600, -30, "ë“ã@íÜ", 'Fontsize', 20);
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), 'ÅZ', 'Color','red', 'Fontsize', 8);
@@ -64,15 +65,16 @@ for k = wait_N:1:N
     if simulation_cond<0    % âΩÇÁÇ©ÇÃèIóπå¥àˆÇ™ê∂Ç∂ÇΩ
         break;
     end
-    func.drawRobot(state_robot, body, body_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
+    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
     time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
+    
     if exist('save_video_name', 'var') == 1  % movieçÏê¨
         if mod(k,4) == 1
             movie_k = movie_k + 1;
             Movie(movie_k) = getframe(gcf);
         end
     else
-        pause(delta_t);
+        pause(delta_t/2);
     end
     drawnow limitrate
 end
