@@ -1,2 +1,5 @@
 # MATLABの一時保存ファイルを無視
 *.asv
+
+# videoフォルダを無視
+video/
