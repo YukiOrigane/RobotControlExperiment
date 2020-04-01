@@ -45,20 +45,24 @@ t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
 u = zeros(N, 2);
+z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
+value_light_sensor = zeros(size(list_light_sensor,1),1);
+value_range_sensor = zeros(size(list_range_sensor,1),1);
 simulation_cond = 1;    % 実行
 movie_k = 0;
 
 for k = wait_N:1:N
     if k>0
         condition_display.String = "スタート";
-        q(k,:) = state_robot;
-        u(k,:) = control_input;
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
             control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
         end
+        q(k,:) = state_robot;
+        u(k,:) = control_input;
+        z(k,:) = [value_light_sensor.', value_range_sensor.'];
     end
     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
@@ -87,8 +91,8 @@ if simulation_cond == 1
 end
 
 % figure
-% plot(q(:,1), q(:,3))
-% plot(t, u(:,1), t, u(:,2));
+% j = 1:k;
+% plot(j, z(1:k,4));
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
