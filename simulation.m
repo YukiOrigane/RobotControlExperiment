@@ -21,8 +21,8 @@ run("robot.m");
 
 body_line = line;
 wheel_line = [line, line];
-time_display = text(0, -30, strcat("T = ",string(0.0),"[s]"),'Fontsize',20);
-condition_display = text(600, -30, "待機中", 'Fontsize', 20);
+cond_string = "待機中";
+message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);
 light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
 for i = 1:size(list_range_sensor,1)
@@ -54,7 +54,7 @@ movie_k = 0;
 
 for k = wait_N:1:N
     if k>0
-        condition_display.String = "スタート";
+        cond_string = "スタート";
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
@@ -67,10 +67,10 @@ for k = wait_N:1:N
     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % 何らかの終了原因が生じた
-        break;
+        cond_string = "終了";
     end
     func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
-    time_display.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s]");
+    message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
     
     if exist('save_video_name', 'var') == 1  % movie作成
         if mod(k,4) == 1
@@ -81,6 +81,11 @@ for k = wait_N:1:N
         pause(delta_t/2);
     end
     drawnow limitrate
+    
+    if simulation_cond<0    % 何らかの終了原因が生じた
+        break;
+    end
+    
 end
 
 clear controller % for clear perisistent variable
