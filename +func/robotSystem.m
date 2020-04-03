@@ -21,7 +21,6 @@ function q_next = robotSystem(q, u, wheel, delta_t, time_constant)
         end
         list_sp(:,1:filter_N-1) = list_sp(:,2:filter_N);  % “ü—Í—š—ğ‚ÌXV
         list_sp(:,filter_N) = wheel_speed;  % 1Ÿ’x‚ê‘O‚Ìwheel_speed‚ğ“Š“ü
-        size(filter.')
         wheel_speed = (list_sp * filter.')/time_constant*delta_t;
     end
     theta_dot = wheel_speed(1,1)/L(1,1) - wheel_speed(2,1)/L(2,1);

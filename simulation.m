@@ -3,6 +3,7 @@ clear   % 一旦ワークスペース内全変数を消去
 field_number = '01';
 
 % save_video_name = 'movie';
+
 time_constant = 0.1;
 
 run("fields/set_field_list.m");
@@ -102,11 +103,10 @@ if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
 end
 
-figure
-j = 1:k;
-plot(j, q(1:k,1), j, q(1:k,2));
-plot(1:k-1,q(2:k,1)-q(1:k-1,1),1:k-1,u(2:k,1))
-legend("\.{x}","u",'Interpreter','latex');
+% figure
+% j = 1:k;
+% plot(j, q(1:k,1), j, q(1:k,2));
+
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
