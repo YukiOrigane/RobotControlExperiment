@@ -3,6 +3,7 @@ clear   % 一旦ワークスペース内全変数を消去
 field_number = '01';
 
 % save_video_name = 'movie';
+time_constant = 0.1;
 
 run("fields/set_field_list.m");
 field_folder = field_list(field_number);
@@ -64,7 +65,12 @@ for k = wait_N:1:N
         u(k,:) = control_input;
         z(k,:) = [value_light_sensor.', value_range_sensor.'];
     end
-    state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
+    if exist('time_constant','var') == 1
+        state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, time_constant);
+    else
+        state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
+    end
+    
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % 何らかの終了原因が生じた
         cond_string = "終了";
@@ -90,14 +96,17 @@ end
 
 clear controller % for clear perisistent variable
 clear checkRobotPosition
+clear robotSystem
 
 if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
 end
 
-% figure
-% j = 1:k;
-% plot(j, z(1:k,4));
+figure
+j = 1:k;
+plot(j, q(1:k,1), j, q(1:k,2));
+plot(1:k-1,q(2:k,1)-q(1:k-1,1),1:k-1,u(2:k,1))
+legend("\.{x}","u",'Interpreter','latex');
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
