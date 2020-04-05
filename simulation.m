@@ -4,7 +4,7 @@ field_number = '01';
 
 % save_video_name = 'movie';
 
-time_constant = 0.1;
+% time_constant = 0.1;  % 時定数
 
 run("fields/set_field_list.m");
 field_folder = field_list(field_number);
@@ -48,9 +48,9 @@ N = 18000;       % シミュレーション最大時間 3min
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);    % 状態履歴
-u = zeros(N, 2);    % 入力履歴
+u = zeros(N, size(wheel,1));    % 入力履歴
 z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));  % 測定履歴
-control_input = [0.0;0.0];    % 制御入力：dutyR, dutyL (-1.0 ~ +1.0, duty rate
+control_input = zeros(size(wheel,1),1);    % 制御入力：dutyR, dutyL (-1.0 ~ +1.0, duty rate
 value_light_sensor = zeros(size(list_light_sensor,1),1);    % ライトセンサ取得値
 value_range_sensor = zeros(size(list_range_sensor,1),1);    % 距離センサ取得値
 simulation_cond = 1;    % 実行
