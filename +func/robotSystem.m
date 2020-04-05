@@ -1,6 +1,6 @@
 function q_next = robotSystem(q, u, wheel, delta_t, time_constant)
-    persistent list_sp;
-    persistent t filter filter_N;
+    persistent list_sp; % ホイールスピードの履歴
+    persistent t filter filter_N;   % 畳み込み変数，フィルタ配列，フィルタ配列長さ
 
     for i = 1:2
        if abs( u(i,1) ) > 1.0

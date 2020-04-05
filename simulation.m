@@ -21,40 +21,42 @@ field_wall = field_wall.';
 
 run("robot.m");
 
-body_line = line;
-wheel_line = [line, line];
-cond_string = "待機中";
-message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);
-light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
-range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
+body_line = line;   % ロボット本体のライン
+wheel_line = gobjects(size(wheel,1));   % ホイール用のライン
+for i = 1:size(wheel,1)
+    wheel_line(i) = line;
+end
+cond_string = "待機中";    % 状態表示テキストの中身
+message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);  % 画面左上のテキスト
+light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);  % ライトセンサ表示点
+range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta'); % 距離センサ表示点
+range_sensor_line = gobjects(1,size(list_range_sensor,1));   % 距離センサ走査線
 for i = 1:size(list_range_sensor,1)
     range_sensor_line(i) = line;
     range_sensor_line(i).Visible = range_line_visible;
     range_sensor_line(i).Color = 'g';
 end
-% range_sensor_line.Visible = repmat(range_line_visible,1,2);
 
-range_detect_points = zeros(2, size(list_range_sensor,1));
+range_detect_points = zeros(2, size(list_range_sensor,1));  % 距離センサの到達点
 
-% state_robot = [200;500;0];  % gposX, gposY, gtheta
-state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
-environmental_light_noise = 40 * (rand-0.5);
+state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];  % ロボットの初期位置を決定
+environmental_light_noise = 40 * (rand-0.5);    % 環境光ノイズの設定
 
-delta_t = 0.01;
+delta_t = 0.01; % シミュレーション刻み時間
 wait_N = -50;  % 開始までの時間
 N = 18000;       % シミュレーション最大時間 3min
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
-q = zeros(N, 3);
-u = zeros(N, 2);
-z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));
-control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
-value_light_sensor = zeros(size(list_light_sensor,1),1);
-value_range_sensor = zeros(size(list_range_sensor,1),1);
+q = zeros(N, 3);    % 状態履歴
+u = zeros(N, 2);    % 入力履歴
+z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));  % 測定履歴
+control_input = [0.0;0.0];    % 制御入力：dutyR, dutyL (-1.0 ~ +1.0, duty rate
+value_light_sensor = zeros(size(list_light_sensor,1),1);    % ライトセンサ取得値
+value_range_sensor = zeros(size(list_range_sensor,1),1);    % 距離センサ取得値
 simulation_cond = 1;    % 実行
-movie_k = 0;
+movie_k = 0;    % 動画フレーム番号
 
-for k = wait_N:1:N
+for k = wait_N:1:N  % メインループ
     if k>0
         cond_string = "スタート";
         if mod(k,5) == 0    % 20Hz
