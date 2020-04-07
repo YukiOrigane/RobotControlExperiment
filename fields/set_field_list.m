@@ -9,3 +9,4 @@ field_list('07') = '07_ssr';
 field_list('08') = '08_inf';
 field_list('09') = '09_gradation';
 field_list('10') = '10_maze5_5';
+field_list('11') = '11_block';
