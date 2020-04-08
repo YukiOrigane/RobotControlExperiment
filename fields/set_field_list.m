@@ -10,3 +10,6 @@ field_list('08') = '08_inf';
 field_list('09') = '09_gradation';
 field_list('10') = '10_maze5_5';
 field_list('11') = '11_block';
+field_list('12') = '12_square_wall';
+field_list('13') = '13_square_wall_2';
+field_list('14') = '14_search_wall';
