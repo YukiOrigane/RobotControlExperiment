@@ -17,7 +17,7 @@ func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
-light_sensor_visible = "on";
+light_sensor_visible = "on";    % ライトセンサ表示するか否か
 time_constant = 0.1;    % 時定数の初期設定値
 viscocity = 0.0;    % 粘性の初期設定値
 run("robot.m");
@@ -104,10 +104,10 @@ if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
 end
 
-figure
-j = 1:k;
-plot(j, q(1:k,2));
-grid on
+% figure
+% j = 1:k;
+% plot(j, q(1:k,2));
+% grid on
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
