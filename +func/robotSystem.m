@@ -1,6 +1,11 @@
 function q_next = robotSystem(q, u, wheel, delta_t, sysconf)
     persistent list_sp;
     persistent t filter filter_N;
+    persistent wheel_speed;
+    
+    if isempty(wheel_speed)
+        wheel_speed = zeros(2,1);
+    end
     
     for i = 1:2
        if abs( u(i,1) ) > 1.0
@@ -8,10 +13,10 @@ function q_next = robotSystem(q, u, wheel, delta_t, sysconf)
        end
     end
     Kv = [1000 0;0 990];     % motor constant value
-   if sysconf('wheel_noise') == "on"   % ホイールに偏ノイズを入れる
-        wheel_speed = Kv * u + ([[abs(u(1))>0.01, 0]; [0, -1*(abs(u(2))>0.01)]])*10*rand(2,1);
+   if sysconf('friction_force') == "on"   % ホイール力に摩擦を入れる
+       wheel_force = Kv * u + [0 -0.1]*wheel_speed + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1); 
     else
-        wheel_speed = Kv * u + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1);         % dual wheel speed [v_right, v_left]
+       wheel_force = Kv * u + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1);
     end
     L = vecnorm( wheel, 2, 2);
         
@@ -25,8 +30,10 @@ function q_next = robotSystem(q, u, wheel, delta_t, sysconf)
             list_sp = zeros(2,filter_N);
         end
         list_sp(:,1:filter_N-1) = list_sp(:,2:filter_N);  % 入力履歴の更新
-        list_sp(:,filter_N) = wheel_speed;  % 1次遅れ前のwheel_speedを投入
+        list_sp(:,filter_N) = wheel_force;  % 1次遅れ前のwheel_forceを投入
         wheel_speed = (list_sp * filter.')/time_constant*delta_t;
+    else
+        wheel_speed = wheel_force;
     end
     theta_dot = wheel_speed(1,1)/L(1,1) - wheel_speed(2,1)/L(2,1);
     v = [1/2 1/2]*wheel_speed;
