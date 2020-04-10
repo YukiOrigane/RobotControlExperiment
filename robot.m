@@ -10,4 +10,4 @@ list_range_sensor = [100 0 0;];
 range_line_visible = 'off';
 light_sensor_visible = "on";
 
-system_lebel = 2;   % システムのリアル度を変更
+system_lebel = 1;   % システムのリアル度を変更
