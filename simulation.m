@@ -4,8 +4,6 @@ field_number = '01';
 
 % save_video_name = 'movie';
 
-time_constant = 0.1;
-
 run("fields/set_field_list.m");
 field_folder = field_list(field_number);
 
@@ -19,7 +17,11 @@ func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
+light_sensor_visible = "on";    % ライトセンサ表示するか否か
+% time_constant = 0.1;    % 時定数の初期設定値
+% viscocity = 0.0;    % 粘性の初期設定値
 run("robot.m");
+run("list_system_config.m");    % システム設定の読み込み
 
 body_line = line;
 wheel_line = [line, line];
@@ -36,7 +38,6 @@ end
 
 range_detect_points = zeros(2, size(list_range_sensor,1));
 
-% state_robot = [200;500;0];  % gposX, gposY, gtheta
 state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
 environmental_light_noise = 40 * (rand-0.5);
 
@@ -66,17 +67,18 @@ for k = wait_N:1:N
         u(k,:) = control_input;
         z(k,:) = [value_light_sensor.', value_range_sensor.'];
     end
-    if exist('time_constant','var') == 1
-        state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, time_constant);
-    else
-        state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
-    end
+    % if exist('time_constant','var') == 1
+    %     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, time_constant, viscocity);
+    % else
+    %     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t);
+    % end
+    state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, system_config);
     
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
     if simulation_cond<0    % 何らかの終了原因が生じた
         cond_string = "終了";
     end
-    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line);
+    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, light_sensor_visible);
     message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
     
     if exist('save_video_name', 'var') == 1  % movie作成
@@ -105,8 +107,8 @@ end
 
 % figure
 % j = 1:k;
-% plot(j, q(1:k,1), j, q(1:k,2));
-
+% plot(j, q(1:k,2));
+% grid on
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
