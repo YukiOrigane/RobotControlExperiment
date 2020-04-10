@@ -13,8 +13,8 @@ function q_next = robotSystem(q, u, wheel, delta_t, sysconf)
        end
     end
     Kv = [1000 0;0 990];     % motor constant value
-   if sysconf('friction_force') == "on"   % ホイール力に摩擦を入れる
-       wheel_force = Kv * u + [0 -0.1]*wheel_speed + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1); 
+   if sysconf('wheel_noise') == "on"   % ホイール力にノイズを入れる
+       wheel_force = Kv * u + ([[abs(u(1))>0.01, 0]; [0, -(abs(u(2))>0.01)]])*20*rand(2,1); 
     else
        wheel_force = Kv * u + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1);
     end
