@@ -9,4 +9,5 @@ list_range_sensor = [100 0 0;];
 
 range_line_visible = 'off';
 light_sensor_visible = "on";
-system_lebel = 2;   % 慣性適用
+
+system_lebel = 2;   % システムのリアル度を変更
