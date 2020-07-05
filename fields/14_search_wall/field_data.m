@@ -2,20 +2,20 @@ x = 3000;
 y = 1500;
 field_size = [x, y];  % field size [x, y];
 
-yg = round(1300*rand);  % ƒS[ƒ‹yÀ•W‚ğƒ‰ƒ“ƒ_ƒ€Œˆ’è
+yg = round(1300*rand);  % ã‚´ãƒ¼ãƒ«yåº§æ¨™ã‚’ãƒ©ãƒ³ãƒ€ãƒ æ±ºå®š
 
-finish_zone = [2700; yg; 200; 1]; % I—¹ƒ][ƒ“ [pox; posy; ”¼Œa];
+finish_zone = [2700; yg; 200; 1]; % çµ‚äº†ã‚¾ãƒ¼ãƒ³ [pox; posy; åŠå¾„];
 
-% MATLABã‚Åì¬
-field_line = ones(field_size(1,2), field_size(1,1)).*252;   % ”’‚Á‚Û‚¢F‚É‰Šú‰»
-field_wall = zeros(field_size(1,2), field_size(1,1));       % 0i•Ç‚È‚µj‚É‰Šú‰»
+% MATLABä¸Šã§ä½œæˆ
+field_line = ones(field_size(1,2), field_size(1,1)).*252;   % ç™½ã£ã½ã„è‰²ã«åˆæœŸåŒ–
+field_wall = zeros(field_size(1,2), field_size(1,1));       % 0ï¼ˆå£ãªã—ï¼‰ã«åˆæœŸåŒ–
 
 field_line(yg-15:yg+15, 2300:3000) = 20;
 
-% ‰¡ü
+% æ¨ªç·š
 field_wall(1:30,1:2200) = 1;
 field_wall(1470:1500,1:2200) = 1;
 
-% cü
+% ç¸¦ç·š
 field_wall(1:1500,1:30) = 1;
 field_wall(yg-150:yg+150,2970:3000) = 1;

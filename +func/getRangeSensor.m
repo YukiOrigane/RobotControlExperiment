@@ -8,32 +8,32 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
        detect_points(:,i) = [0; 0];
        direction = q(3,1) + list(i,3);
        for j = 1:3000  % max range is 3000mm
-            pos(:,i) = pos(:,i) + [cos(direction); sin(direction)]; % ”g‚Ìis
+            pos(:,i) = pos(:,i) + [cos(direction); sin(direction)]; % æ³¢ã®é€²è¡Œ
             x = round(pos(1,i));
             y = round(pos(2,i));
-            if x > field_size(1,1)-15 || x < 15 || y > field_size(1,2)-15 || y < 15 % 15mm‚ÍCŒX‚«ŒŸo‰~‚Ìƒ}[ƒWƒ“
+            if x > field_size(1,1)-15 || x < 15 || y > field_size(1,2)-15 || y < 15 % 15mmã¯ï¼Œå‚¾ãæ¤œå‡ºå††ã®ãƒžãƒ¼ã‚¸ãƒ³
                 detect_points(:,i) = [x; y];
-                break; % ‘{õ”ÍˆÍ‚ªƒtƒB[ƒ‹ƒh’´‚¦‚½
+                break; % æœç´¢ç¯„å›²ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰è¶…ãˆãŸ
             end
             if wall( x, y ) == 1
                 detect_points(:,i) = [x; y];
-                % Õ“ËŠp“x‚ÌŒvŽZ
+                % è¡çªè§’åº¦ã®è¨ˆç®—
                 pre_flag_in = 0;
-                for theta = 0:0.01:2*pi % –½’†“_‚ÌŽü‚è‚É”¼Œa12‡o‚Ì‰~Žü‚ð“WŠJ
+                for theta = 0:0.01:2*pi % å‘½ä¸­ç‚¹ã®å‘¨ã‚Šã«åŠå¾„12ãŽœã®å††å‘¨ã‚’å±•é–‹
                     flag_in = wall(round(x+12*cos(theta)), round(y+12*sin(theta)));
-                    if pre_flag_in == 1 && flag_in == 0 % ‰~Žü‚ª•Ç‚©‚ço‚½
+                    if pre_flag_in == 1 && flag_in == 0 % å††å‘¨ãŒå£ã‹ã‚‰å‡ºãŸ
                         theta_1 = theta;
                     end
-                    if pre_flag_in == 0 && flag_in == 1 % ‰~Žü‚ª•Ç‚É“ü‚Á‚½
+                    if pre_flag_in == 0 && flag_in == 1 % å††å‘¨ãŒå£ã«å…¥ã£ãŸ
                         theta_2 = theta;
                     end
                     pre_flag_in = flag_in;
                 end
-                theta_d = (theta_1 + theta_2 - pi)/2;   % •Ç‚ÌŒX‚«‚ÌŒvŽZ
+                theta_d = (theta_1 + theta_2 - pi)/2;   % å£ã®å‚¾ãã®è¨ˆç®—
                 if abs(theta_d) > pi
                     theta_d = sign(theta_d) * ( pi-abs(theta_d) );
                 end
-                if abs( pi/2 - abs(func.wrapPi(theta_d)-func.wrapPi(direction)) ) < pi/18 % “üŽËŠp<10‹‚È‚ç‹——£‚ð“n‚·
+                if abs( pi/2 - abs(func.wrapPi(theta_d)-func.wrapPi(direction)) ) < pi/18 % å…¥å°„è§’<10Â°ãªã‚‰è·é›¢ã‚’æ¸¡ã™
                      val(i,1) = j + func.restrictedRandN(0, 0.01*j, 0.04*j);
                 end
                 break;
@@ -41,6 +41,6 @@ function [val, detect_points] = getRangeSensor(q, list, wall)
        end
     end
     
-    % val = val + 10 * randn; % ƒmƒCƒY•t—^
+    % val = val + 10 * randn; % ãƒŽã‚¤ã‚ºä»˜ä¸Ž
     % disp(val)
 end

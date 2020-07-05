@@ -1,4 +1,4 @@
-clear   % àÍíUÉèÅ[ÉNÉXÉyÅ[ÉXì‡ëSïœêîÇè¡ãé
+clear   % ‰∏ÄÊó¶„ÉØ„Éº„ÇØ„Çπ„Éö„Éº„ÇπÂÜÖÂÖ®Â§âÊï∞„ÇíÊ∂àÂéª
 
 field_number = '01';
 
@@ -17,17 +17,17 @@ func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
-light_sensor_visible = "on";    % ÉâÉCÉgÉZÉìÉTï\é¶Ç∑ÇÈÇ©î€Ç©
-% time_constant = 0.1;    % éûíËêîÇÃèâä˙ê›íËíl
-% viscocity = 0.0;    % îSê´ÇÃèâä˙ê›íËíl
+light_sensor_visible = "on";    % „É©„Ç§„Éà„Çª„É≥„ÇµË°®Á§∫„Åô„Çã„ÅãÂê¶„Åã
+% time_constant = 0.1;    % ÊôÇÂÆöÊï∞„ÅÆÂàùÊúüË®≠ÂÆöÂÄ§
+% viscocity = 0.0;    % Á≤òÊÄß„ÅÆÂàùÊúüË®≠ÂÆöÂÄ§
 run("robot.m");
-run("list_system_config.m");    % ÉVÉXÉeÉÄê›íËÇÃì«Ç›çûÇ›
+run("list_system_config.m");    % „Ç∑„Çπ„ÉÜ„É†Ë®≠ÂÆö„ÅÆË™≠„ÅøËæº„Åø
 
 body_line = line;
 wheel_line = [line, line];
-cond_string = "ë“ã@íÜ";
+cond_string = "ÂæÖÊ©ü‰∏≠";
 message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);
-light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), 'ÅZ', 'Color','red', 'Fontsize', 8);
+light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '„Äá', 'Color','red', 'Fontsize', 8);
 range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
 for i = 1:size(list_range_sensor,1)
     range_sensor_line(i) = line;
@@ -42,8 +42,8 @@ state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)
 environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
-wait_N = -50;  % äJénÇ‹Ç≈ÇÃéûä‘
-N = 18000;       % ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìç≈ëÂéûä‘ 3min
+wait_N = -50;  % ÈñãÂßã„Åæ„Åß„ÅÆÊôÇÈñì
+N = 18000;       % „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥ÊúÄÂ§ßÊôÇÈñì 3min
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
@@ -52,12 +52,12 @@ z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 value_light_sensor = zeros(size(list_light_sensor,1),1);
 value_range_sensor = zeros(size(list_range_sensor,1),1);
-simulation_cond = 1;    % é¿çs
+simulation_cond = 1;    % ÂÆüË°å
 movie_k = 0;
 
 for k = wait_N:1:N
     if k>0
-        cond_string = "ÉXÉ^Å[Ég";
+        cond_string = "„Çπ„Çø„Éº„Éà";
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
@@ -75,13 +75,13 @@ for k = wait_N:1:N
     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, system_config);
     
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
-    if simulation_cond<0    % âΩÇÁÇ©ÇÃèIóπå¥àˆÇ™ê∂Ç∂ÇΩ
-        cond_string = "èIóπ";
+    if simulation_cond<0    % ‰Ωï„Çâ„Åã„ÅÆÁµÇ‰∫ÜÂéüÂõ†„ÅåÁîü„Åò„Åü
+        cond_string = "ÁµÇ‰∫Ü";
     end
     func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, light_sensor_visible);
     message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
     
-    if exist('save_video_name', 'var') == 1  % movieçÏê¨
+    if exist('save_video_name', 'var') == 1  % movie‰ΩúÊàê
         if mod(k,4) == 1
             movie_k = movie_k + 1;
             Movie(movie_k) = getframe(gcf);
@@ -91,7 +91,7 @@ for k = wait_N:1:N
     end
     drawnow limitrate
     
-    if simulation_cond<0    % âΩÇÁÇ©ÇÃèIóπå¥àˆÇ™ê∂Ç∂ÇΩ
+    if simulation_cond<0    % ‰Ωï„Çâ„Åã„ÅÆÁµÇ‰∫ÜÂéüÂõ†„ÅåÁîü„Åò„Åü
         break;
     end
     
@@ -102,7 +102,7 @@ clear checkRobotPosition
 clear robotSystem
 
 if simulation_cond == 1
-    disp("ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìéûä‘Ç™èIóπÇµÇ‹ÇµÇΩ");
+    disp("„Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥ÊôÇÈñì„ÅåÁµÇ‰∫Ü„Åó„Åæ„Åó„Åü");
 end
 
 % figure

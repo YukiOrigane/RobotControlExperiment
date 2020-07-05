@@ -1,10 +1,10 @@
-system_config('time_constant') = "off"; % 1Ÿ’x‚êŒniŠµ«—R—ˆj‚Ì’è” 0‚Å“K—p‚¹‚¸
-system_config('wheel_noise') = "off";   % ƒzƒC[ƒ‹o—Í‚É•Î‚Á‚½ƒmƒCƒY‚ğ“ü‚ê‚é‚©”Û‚©
-system_config('add_wheel') = "off"; % “Æ—§“ñ—ÖˆÈŠO‚ğg—p‚·‚é‚©”Û‚©
+system_config('time_constant') = "off"; % 1æ¬¡é…ã‚Œç³»ï¼ˆæ…£æ€§ç”±æ¥ï¼‰ã®æ™‚å®šæ•° 0ã§é©ç”¨ã›ãš
+system_config('wheel_noise') = "off";   % ãƒ›ã‚¤ãƒ¼ãƒ«å‡ºåŠ›ã«åã£ãŸãƒã‚¤ã‚ºã‚’å…¥ã‚Œã‚‹ã‹å¦ã‹
+system_config('add_wheel') = "off"; % ç‹¬ç«‹äºŒè¼ªä»¥å¤–ã‚’ä½¿ç”¨ã™ã‚‹ã‹å¦ã‹
 
 if exist('system_lebel','var')
     switch system_lebel
-        case 0  % ‘S•”ƒIƒt
+        case 0  % å…¨éƒ¨ã‚ªãƒ•
         case 1
             system_config('time_constant') = "on";
         case 2
