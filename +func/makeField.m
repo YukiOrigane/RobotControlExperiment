@@ -1,31 +1,31 @@
 function makeField(field_folder)
 
 field_size = zeros(1,2);  % field size [x, y];
-% init_state = zeros(3,1); % ƒƒ{ƒbƒg‚Ì‰Šúó‘Ô [ posx; posy; theta ]; % robot.m‚ÖˆÚs
-finish_zone = zeros(3,1); % I—¹ƒ][ƒ“ [pox; posy; ”¼Œa];
+% init_state = zeros(3,1); % ãƒ­ãƒœãƒƒãƒˆã®åˆæœŸçŠ¶æ…‹ [ posx; posy; theta ]; % robot.mã¸ç§»è¡Œ
+finish_zone = zeros(3,1); % çµ‚äº†ã‚¾ãƒ¼ãƒ³ [pox; posy; åŠå¾„];
 
 run(strcat("fields/" , field_folder, "/", "field_data.m"));
 
 if isfile(strcat("fields/" , field_folder, "/", "field_data.png")) == 1
-    % ‰æ‘œƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İì¬
+    % ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ä½œæˆ
 image = imread(strcat("fields/" , field_folder, "/", "field_data.png"));
 
-field_line = image(:,:,3);  % ƒ‰ƒCƒ“‚Í‰æ‘œ‚ÌB’l‚ğg‚¤
-field_wall = image(:,:,1);  % •Ç‚Í‰æ‘œ‚ÌR’l‚ğg‚¤
+field_line = image(:,:,3);  % ãƒ©ã‚¤ãƒ³ã¯ç”»åƒã®Bå€¤ã‚’ä½¿ã†
+field_wall = image(:,:,1);  % å£ã¯ç”»åƒã®Rå€¤ã‚’ä½¿ã†
 
 field_line = 255 - field_line;
     for i=1:field_size(1,2)
         for j = 1:field_size(1,1)
             if field_wall(i,j)>0
-                field_wall(i,j) = 1;    % R’l„0‚Å•Ç‚ ‚è
+                field_wall(i,j) = 1;    % Rå€¤ï¼0ã§å£ã‚ã‚Š
             else
-                field_wall(i,j) = 0;    % R’l=0‚Å•Ç‚È‚µ
+                field_wall(i,j) = 0;    % Rå€¤=0ã§å£ãªã—
             end
         end
     end
 end
 
-% ƒf[ƒ^‚ğƒtƒ@ƒCƒ‹‚Éo—Í
+% ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›
 save(strcat("fields/" , field_folder, "/", "field"));
 
 end

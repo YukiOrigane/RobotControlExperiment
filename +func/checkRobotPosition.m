@@ -13,12 +13,12 @@ function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
         y = gpos_point(2,i);
         if x<1 || y<1 || x>field_size(1,1) || y>field_size(1,2)
             check = -1;
-            disp("ƒƒ{ƒbƒg‚ªƒtƒB[ƒ‹ƒhŠO‚Éo‚Ü‚µ‚½");
+            disp("ãƒ­ãƒœãƒƒãƒˆãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å¤–ã«å‡ºã¾ã—ãŸ");
             break
         end
         if wall(x,y) == 1
             check = -1;
-            disp("ƒƒ{ƒbƒg‚ª•Ç‚ÉÕ“Ë‚µ‚Ü‚µ‚½");
+            disp("ãƒ­ãƒœãƒƒãƒˆãŒå£ã«è¡çªã—ã¾ã—ãŸ");
             break;
         end
         if vecnorm( [x;y]-finish_zone(1:2,1) ) < finish_zone(3,1)
@@ -26,11 +26,11 @@ function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
         end
     end
     if in_finish_zone == 5
-        if finish_zone(4,1) == 0    % N“ü‚ÅOK
-            disp("ƒƒ{ƒbƒg‚ªI—¹ƒGƒŠƒA‚É“ü‚è‚Ü‚µ‚½");
+        if finish_zone(4,1) == 0    % ä¾µå…¥ã§OK
+            disp("ãƒ­ãƒœãƒƒãƒˆãŒçµ‚äº†ã‚¨ãƒªã‚¢ã«å…¥ã‚Šã¾ã—ãŸ");
             check = -1;
-        elseif pre_q == q           % Ã~‚ğ—v‹
-            disp("ƒƒ{ƒbƒg‚ªI—¹ƒGƒŠƒA‚Å’â~‚µ‚Ü‚µ‚½");
+        elseif pre_q == q           % é™æ­¢ã‚’è¦æ±‚
+            disp("ãƒ­ãƒœãƒƒãƒˆãŒçµ‚äº†ã‚¨ãƒªã‚¢ã§åœæ­¢ã—ã¾ã—ãŸ");
             check = -1;
         end
         pre_q = q;

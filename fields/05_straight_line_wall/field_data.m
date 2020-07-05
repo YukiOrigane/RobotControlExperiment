@@ -1,12 +1,12 @@
 
 field_size = [3000, 1000];  % field size [x, y];
 
-finish_zone = [2500; 500; 200; 1]; % I—¹ƒ][ƒ“ [pox; posy; ”¼Œa; N“ü0 Ã~1];
+finish_zone = [2500; 500; 200; 1]; % çµ‚äº†ã‚¾ãƒ¼ãƒ³ [pox; posy; åŠå¾„; ä¾µå…¥0 é™æ­¢1];
 
-% MATLABã‚Åì¬
-field_line = ones(field_size(1,2), field_size(1,1)).*252;   % ”’‚Á‚Û‚¢F‚É‰Šú‰»
-field_wall = zeros(field_size(1,2), field_size(1,1));       % 0i•Ç‚È‚µj‚É‰Šú‰»
+% MATLABä¸Šã§ä½œæˆ
+field_line = ones(field_size(1,2), field_size(1,1)).*252;   % ç™½ã£ã½ã„è‰²ã«åˆæœŸåŒ–
+field_wall = zeros(field_size(1,2), field_size(1,1));       % 0ï¼ˆå£ãªã—ï¼‰ã«åˆæœŸåŒ–
 
-field_line(485:515,:) = 20; % w’è•”•ª‚Ì‚İ•ü‚É•ÏX
+field_line(485:515,:) = 20; % æŒ‡å®šéƒ¨åˆ†ã®ã¿é»’ç·šã«å¤‰æ›´
 % field_line(:,2785:2815) = 20;
-field_wall(10:990,2800:2820) = 1;   % w’è•”•ª‚Ì‚İ‚Pi•Ç‚ ‚èj‚É•ÏX
+field_wall(10:990,2800:2820) = 1;   % æŒ‡å®šéƒ¨åˆ†ã®ã¿ï¼‘ï¼ˆå£ã‚ã‚Šï¼‰ã«å¤‰æ›´

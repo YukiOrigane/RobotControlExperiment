@@ -1,5 +1,5 @@
 
-init_state = [200; 500; 0]; % ƒƒ{ƒbƒg‚Ì‰Šúó‘Ô [ posx; posy; theta ];
+init_state = [200; 500; 0]; % ãƒ­ãƒœãƒƒãƒˆã®åˆæœŸçŠ¶æ…‹ [ posx; posy; theta ];
 
 body = [100 150; -100 100; -100 -100; 100 -150];
 wheel = [0 125; 0 -125];
@@ -10,4 +10,4 @@ list_range_sensor = [100 0 0;];
 range_line_visible = 'off';
 light_sensor_visible = "on";
 
-system_lebel = 1;   % ƒVƒXƒeƒ€‚ÌƒŠƒAƒ‹“x‚ğ•ÏX
+system_lebel = 1;   % ã‚·ã‚¹ãƒ†ãƒ ã®ãƒªã‚¢ãƒ«åº¦ã‚’å¤‰æ›´

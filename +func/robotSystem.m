@@ -13,24 +13,24 @@ function q_next = robotSystem(q, u, wheel, delta_t, sysconf)
        end
     end
     Kv = [1000 0;0 990];     % motor constant value
-   if sysconf('wheel_noise') == "on"   % ƒzƒC[ƒ‹—Í‚ÉƒmƒCƒY‚ğ“ü‚ê‚é
+   if sysconf('wheel_noise') == "on"   % ãƒ›ã‚¤ãƒ¼ãƒ«åŠ›ã«ãƒã‚¤ã‚ºã‚’å…¥ã‚Œã‚‹
        wheel_force = Kv * u + ([[abs(u(1))>0.01, 0]; [0, -(abs(u(2))>0.01)]])*10*rand(2,1); 
     else
        wheel_force = Kv * u + ([[abs(u(1))>0.01, 0]; [(abs(u(2))>0.01), 0]])*60*rand(2,1);
     end
     L = vecnorm( wheel, 2, 2);
         
-    % ’è”‘}“üˆ—
-    if sysconf('time_constant') == "on"  % ’è”‚ ‚è
+    % æ™‚å®šæ•°æŒ¿å…¥å‡¦ç†
+    if sysconf('time_constant') == "on"  % æ™‚å®šæ•°ã‚ã‚Š
         time_constant = 0.1;
-        if isempty(list_sp)   % ˆê‰ñ–Ú
+        if isempty(list_sp)   % ä¸€å›ç›®
             t = 5*time_constant:-delta_t:0;
-            filter = exp(-t/time_constant); % 1ŸŒnƒCƒ“ƒpƒ‹ƒX‰“š‚Ì”z—ñi~‡j
+            filter = exp(-t/time_constant); % 1æ¬¡ç³»ã‚¤ãƒ³ãƒ‘ãƒ«ã‚¹å¿œç­”ã®é…åˆ—ï¼ˆé™é †ï¼‰
             filter_N = length(filter);
             list_sp = zeros(2,filter_N);
         end
-        list_sp(:,1:filter_N-1) = list_sp(:,2:filter_N);  % “ü—Í—š—ğ‚ÌXV
-        list_sp(:,filter_N) = wheel_force;  % 1Ÿ’x‚ê‘O‚Ìwheel_force‚ğ“Š“ü
+        list_sp(:,1:filter_N-1) = list_sp(:,2:filter_N);  % å…¥åŠ›å±¥æ­´ã®æ›´æ–°
+        list_sp(:,filter_N) = wheel_force;  % 1æ¬¡é…ã‚Œå‰ã®wheel_forceã‚’æŠ•å…¥
         wheel_speed = (list_sp * filter.')/time_constant*delta_t;
     else
         wheel_speed = wheel_force;

@@ -1,5 +1,5 @@
 function makeVideo(file_name, M)
-    disp("“®‰æ‚Ìo—Í‚ğŠJn‚µ‚Ü‚·");
+    disp("å‹•ç”»ã®å‡ºåŠ›ã‚’é–‹å§‹ã—ã¾ã™");
     if isfolder('video') == 0
         mkdir('video');
     end
@@ -11,5 +11,5 @@ function makeVideo(file_name, M)
 
     end
     close(v);
-    disp("“®‰æ‚Ìo—Í‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+    disp("å‹•ç”»ã®å‡ºåŠ›ãŒå®Œäº†ã—ã¾ã—ãŸ");
 end
