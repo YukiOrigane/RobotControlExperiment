@@ -1,11 +1,11 @@
 clear   % 一旦ワークスペース内全変数を消去
 
-field_number = '01';
+field_id = '01';
 
 % save_video_name = 'movie';
 
 run("fields/set_field_list.m");
-field_folder = field_list(field_number);
+field_folder = field_list(field_id);
 
 func.makeField(field_folder);
 
@@ -17,7 +17,7 @@ func.drawField(field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
-light_sensor_visible = "on";    % ライトセンサ表示するか否か
+is_light_sensor_visible = true;  % ライトセンサ表示するか否か
 % time_constant = 0.1;    % 時定数の初期設定値
 % viscocity = 0.0;    % 粘性の初期設定値
 run("robot.m");
@@ -78,7 +78,7 @@ for k = wait_N:1:N
     if simulation_cond<0    % 何らかの終了原因が生じた
         cond_string = "終了";
     end
-    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, light_sensor_visible);
+    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, is_light_sensor_visible);
     message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
     
     if exist('save_video_name', 'var') == 1  % movie作成
