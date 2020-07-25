@@ -55,8 +55,8 @@ value_range_sensor = zeros(size(list_range_sensor,1),1);
 simulation_cond = 1;    % 実行
 movie_k = 0;
 
-for k = wait_N:1:N
-    if k>0
+for k = wait_N:N
+    if k > 0
         cond_string = "スタート";
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
@@ -75,11 +75,11 @@ for k = wait_N:1:N
     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, system_config);
     
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
-    if simulation_cond<0    % 何らかの終了原因が生じた
+    if simulation_cond < 0    % 何らかの終了原因が生じた
         cond_string = "終了";
     end
     func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, is_light_sensor_visible);
-    message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
+    message.String = strcat("T = ", num2str(k*delta_t, '%3.2f'), "[s], ", cond_string);
     
     if exist('save_video_name', 'var') == 1  % movie作成
         if mod(k,4) == 1
@@ -91,10 +91,9 @@ for k = wait_N:1:N
     end
     drawnow limitrate
     
-    if simulation_cond<0    % 何らかの終了原因が生じた
+    if simulation_cond < 0  % ループを抜け出す
         break;
     end
-    
 end
 
 clear controller % for clear perisistent variable
@@ -113,4 +112,3 @@ end
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
 end
-
