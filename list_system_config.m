@@ -12,6 +12,3 @@ if exist('system_lebel','var')
             system_config('wheel_noise') = "on";
     end
 end
-
-
-
