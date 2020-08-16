@@ -1,6 +1,18 @@
-clear   % 一旦ワークスペース内全変数を消去
+function simulation(field_id, controller_func, control_param)
 
-field_id = '01';
+clearvars -except field_id controller_func control_param   % 一旦ワークスペース内全変数を消去
+
+if ~exist('field_id','var')    % 定義されてなければ代入
+    field_id = '01';
+end
+
+if ~exist('controller_func','var')
+    controller_func = @controllers.controller;
+end
+
+if ~exist('control_param','var')
+    control_param = [0.5 1];
+end
 
 % save_video_name = 'movie';
 
@@ -61,7 +73,8 @@ for k = wait_N:N
         if mod(k,5) == 0    % 20Hz
             value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
-            control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
+            % control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
+            control_input = controller_func(t(k,1), delta_t, value_light_sensor, value_range_sensor, control_param);
         end
         q(k,:) = state_robot;
         u(k,:) = control_input;
@@ -111,4 +124,6 @@ end
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
+end
+
 end
