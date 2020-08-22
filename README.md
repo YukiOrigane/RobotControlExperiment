@@ -1,6 +1,10 @@
 # RobotControlExperiment
 
 ## 変更点
+
+### トラック，8の字を追加
+それぞれidは15と16です
+
 ### simulation.mを関数化
 #### 定義
 ```MATLAB
