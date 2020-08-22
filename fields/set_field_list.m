@@ -14,3 +14,6 @@ field_list('12') = '12_square_wall';
 field_list('13') = '13_square_wall_2';
 field_list('14') = '14_search_wall';
 field_list('15') = '15_Track';
+
+field_init_state = containers.Map;
+field_init_state('15') = [950; 200; -pi];

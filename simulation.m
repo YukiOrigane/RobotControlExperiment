@@ -35,6 +35,10 @@ is_light_sensor_visible = true;  % ライトセンサ表示するか否か
 run("robot.m");
 run("list_system_config.m");    % システム設定の読み込み
 
+if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定されているか
+    init_state = field_init_state(field_id);
+end
+
 body_line = line;
 wheel_line = [line, line];
 cond_string = "待機中";
@@ -117,10 +121,15 @@ if simulation_cond == 1
     disp("シミュレーション時間が終了しました");
 end
 
-% figure
-% j = 1:k;
-% plot(j, q(1:k,2));
-% grid on
+figure
+j = 1:k;
+line([1,k]*delta_t,[160,160], 'Color','g');
+hold on
+plot(j.*delta_t, sum(z(1:k,1:5)/5, 2));
+legend("目標値","計測値")
+xlabel("時刻[s]")
+ylabel("センサ値")
+grid on
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);

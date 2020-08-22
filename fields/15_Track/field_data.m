@@ -2,7 +2,7 @@ x = 2400;
 y = 1201;
 field_size = [x, y];  % field size [x, y];
 
-finish_zone = [1450; 200; 140; 0]; % 終了ゾーン [pox; posy; 半径];
+finish_zone = [1450; 200; 170; 0]; % 終了ゾーン [pox; posy; 半径];
 
 % MATLAB上で作成
 field_line = ones(field_size(1,2), field_size(1,1)).*252;   % 白っぽい色に初期化
