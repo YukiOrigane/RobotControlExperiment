@@ -54,7 +54,12 @@ end
 
 range_detect_points = zeros(2, size(list_range_sensor,1));
 
-state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
+if system_config('initial_position_noise') == "on"
+    state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
+else
+    state_robot = init_state;
+end
+
 environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
