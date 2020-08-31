@@ -34,8 +34,25 @@ field_wall = field_wall.';
 
 is_light_sensor_visible = true;  % ライトセンサ表示するか否か
 % time_constant = 0.1;    % 時定数の初期設定値
-% viscocity = 0.0;    % 粘性の初期設定値
-run("robot.m");
+viscocity = 0.1;    % 粘性の初期設定値
+
+% run("robot.m"); ------------------------------------------
+init_state = [200; 500; 0]; % ロボットの初期状態 [ posx; posy; theta ];
+
+body = [100 80; -100 80; -100 -80; 100 -80];
+wheel = [0 90; 0 -90];
+
+list_light_sensor = ones(2,5)*100;
+list_light_sensor(2,:) = 0:10:40;   % センサ5つ
+list_light_sensor = list_light_sensor.';
+list_range_sensor = [100 0 0;];
+
+range_line_visible = 'off';
+is_light_sensor_visible = true;
+
+system_lebel = 1;   % システムのリアル度を変更
+% ----------------------------------------------------------
+
 run("list_system_config.m");    % システム設定の読み込み
 
 if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定されているか
