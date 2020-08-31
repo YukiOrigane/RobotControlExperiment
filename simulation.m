@@ -1,6 +1,7 @@
 function simulation(field_id, controller_func, control_param)
 
 clearvars -except field_id controller_func control_param   % 一旦ワークスペース内全変数を消去
+close all;
 
 if ~exist('field_id','var')    % 定義されてなければ代入
     field_id = '01';
@@ -23,9 +24,11 @@ func.makeField(field_folder);
 
 load( strcat("fields/" , field_folder, "/", "field") );
 
-func.drawInit(field_size);
+figure;
+ax = gca;
+func.drawInit(ax, field_size);
 
-func.drawField(field_size, field_line, field_wall, finish_zone);
+func.drawField(ax, field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 

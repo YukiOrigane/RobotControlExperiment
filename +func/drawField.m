@@ -1,4 +1,4 @@
-function drawField(field_size, line, wall, finish_zone)
+function drawField(ax, field_size, line, wall, finish_zone)
 
 field_image = cat(3,line,line,line);
 field_image(:,:,1) = field_image(:,:,1) - wall.*100;
@@ -19,6 +19,6 @@ for i=1:field_size(1)
 end
 
 field_image = rescale(field_image);
-imshow(field_image);
+imshow(field_image, 'Parent',ax);
 
 end
