@@ -94,6 +94,8 @@ control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 value_light_sensor = zeros(size(list_light_sensor,1),1);
 value_range_sensor = zeros(size(list_range_sensor,1),1);
 simulation_cond = 1;    % 実行
+global stop_call
+stop_call = false;
 movie_k = 0;
 
 for k = wait_N:N
@@ -132,8 +134,9 @@ for k = wait_N:N
         pause(delta_t/2);
     end
     drawnow limitrate
+    pause(0.001);
     
-    if simulation_cond < 0  % ループを抜け出す
+    if simulation_cond < 0 || stop_call  % ループを抜け出す
         break;
     end
 end
