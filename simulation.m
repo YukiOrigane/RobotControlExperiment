@@ -84,7 +84,8 @@ environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
 wait_N = -50;  % 開始までの時間
-N = 18000;       % シミュレーション最大時間 3min
+% N = 18000;       % シミュレーション最大時間 3min
+N = 3000;
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
