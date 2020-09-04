@@ -54,6 +54,7 @@ system_lebel = 1;   % システムのリアル度を変更
 % ----------------------------------------------------------
 
 run("list_system_config.m");    % システム設定の読み込み
+system_config('initial_position_noise') = "off";
 
 if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定されているか
     init_state = field_init_state(field_id);
