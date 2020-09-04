@@ -42,8 +42,8 @@ init_state = [200; 500; 0]; % ロボットの初期状態 [ posx; posy; theta ];
 body = [100 80; -100 80; -100 -80; 100 -80];
 wheel = [0 90; 0 -90];
 
-list_light_sensor = ones(2,5)*100;
-list_light_sensor(2,:) = 0:10:40;   % センサ5つ
+list_light_sensor = ones(2,17)*100;
+list_light_sensor(2,:) = 0:2.5:40;   % センサ17つ
 list_light_sensor = list_light_sensor.';
 list_range_sensor = [100 0 0;];
 
@@ -153,7 +153,7 @@ figure
 j = 1:k;
 line([1,k]*delta_t,[160,160], 'Color','g');
 hold on
-plot(j.*delta_t, sum(z(1:k,1:5)/5, 2));
+plot(j.*delta_t, sum(z(1:k,1:17)/17, 2));
 legend("目標値","計測値")
 xlabel("時刻[s]")
 ylabel("センサ値")

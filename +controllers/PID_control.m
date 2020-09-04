@@ -9,7 +9,7 @@
 function u = PID_control(t, delta_t, value_light_sensor, value_range_sensor, gain)
 persistent sum_e pre_e
 
-z = sum(value_light_sensor,'all')/5;
+z = sum(value_light_sensor,'all')/17;
 e = (160-z) / 160;
 
 if isempty(sum_e)

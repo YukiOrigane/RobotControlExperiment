@@ -5,7 +5,7 @@
 % gain[2] : 回転成分ゲイン
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function u = BANGBANG_control(t, delta_t, value_light_sensor, value_range_sensor, gain)
-z = sum(value_light_sensor,'all')/5;
+z = sum(value_light_sensor,'all')/17;
 if z >160  % センサ白検知
     e = -0.1;
 else
