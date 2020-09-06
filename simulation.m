@@ -143,7 +143,7 @@ for k = wait_N:N
     end
 end
 
-clear controller % for clear perisistent variable
+clear PID_control
 clear checkRobotPosition
 clear robotSystem
 
