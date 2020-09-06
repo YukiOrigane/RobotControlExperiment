@@ -1,6 +1,7 @@
 function simulation(field_id, controller_func, control_param)
 
 clearvars -except field_id controller_func control_param   % 一旦ワークスペース内全変数を消去
+close all;
 
 if ~exist('field_id','var')    % 定義されてなければ代入
     field_id = '01';
@@ -23,17 +24,37 @@ func.makeField(field_folder);
 
 load( strcat("fields/" , field_folder, "/", "field") );
 
-func.drawInit(field_size);
+figure;
+ax = gca;
+func.drawInit(ax, field_size);
 
-func.drawField(field_size, field_line, field_wall, finish_zone);
+func.drawField(ax, field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
 is_light_sensor_visible = true;  % ライトセンサ表示するか否か
 % time_constant = 0.1;    % 時定数の初期設定値
-% viscocity = 0.0;    % 粘性の初期設定値
-run("robot.m");
+viscocity = 0.1;    % 粘性の初期設定値
+
+% run("robot.m"); ------------------------------------------
+init_state = [200; 500; 0]; % ロボットの初期状態 [ posx; posy; theta ];
+
+body = [100 80; -100 80; -100 -80; 100 -80];
+wheel = [0 90; 0 -90];
+
+list_light_sensor = ones(2,17)*100;
+list_light_sensor(2,:) = 0:2.5:40;   % センサ17つ
+list_light_sensor = list_light_sensor.';
+list_range_sensor = [100 0 0;];
+
+range_line_visible = 'off';
+is_light_sensor_visible = true;
+
+system_lebel = 1;   % システムのリアル度を変更
+% ----------------------------------------------------------
+
 run("list_system_config.m");    % システム設定の読み込み
+system_config('initial_position_noise') = "off";
 
 if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定されているか
     init_state = field_init_state(field_id);
@@ -64,7 +85,8 @@ environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
 wait_N = -50;  % 開始までの時間
-N = 18000;       % シミュレーション最大時間 3min
+% N = 18000;       % シミュレーション最大時間 3min
+N = 3000;
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
@@ -74,6 +96,8 @@ control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 value_light_sensor = zeros(size(list_light_sensor,1),1);
 value_range_sensor = zeros(size(list_range_sensor,1),1);
 simulation_cond = 1;    % 実行
+global stop_call
+stop_call = false;
 movie_k = 0;
 
 for k = wait_N:N
@@ -112,13 +136,14 @@ for k = wait_N:N
         pause(delta_t/2);
     end
     drawnow limitrate
+    pause(0.001);
     
-    if simulation_cond < 0  % ループを抜け出す
+    if simulation_cond < 0 || stop_call  % ループを抜け出す
         break;
     end
 end
 
-clear controller % for clear perisistent variable
+clear PID_control
 clear checkRobotPosition
 clear robotSystem
 
@@ -130,7 +155,7 @@ figure
 j = 1:k;
 line([1,k]*delta_t,[160,160], 'Color','g');
 hold on
-plot(j.*delta_t, sum(z(1:k,1:5)/5, 2));
+plot(j.*delta_t, sum(z(1:k,1:17)/17, 2));
 legend("目標値","計測値")
 xlabel("時刻[s]")
 ylabel("センサ値")
