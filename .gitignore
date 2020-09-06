@@ -3,3 +3,5 @@
 
 # videoフォルダを無視
 video/
+
+test_*
