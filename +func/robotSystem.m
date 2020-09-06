@@ -13,7 +13,7 @@ for i = 1:2
     end
 end
 
-Kv = [1000 0; 0 990];  % motor constant value
+Kv = [1000 0; 0 1000];  % motor constant value
 if sysconf('wheel_noise') == "on"   % ホイール力にノイズを入れる
     wheel_force = Kv * u + ([[abs(u(1)) > 0.01, 0]; [0, (abs(u(2)) > 0.01)]]) * 10 * rand(2,1);
 else
