@@ -1,6 +1,9 @@
 function simulation(field_id, controller_func, control_param)
 
 clearvars -except field_id controller_func control_param   % 一旦ワークスペース内全変数を消去
+clear PID_control
+clear checkRobotPosition
+clear robotSystem
 close all;
 
 if ~exist('field_id','var')    % 定義されてなければ代入
