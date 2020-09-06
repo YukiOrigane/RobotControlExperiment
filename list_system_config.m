@@ -9,7 +9,6 @@ if exist('system_lebel','var')
         case 0  % 全部オフ
         case 1
             system_config('time_constant') = "on";
-            system_config('initial_position_noise') = "on";
         case 2
             system_config('time_constant') = "on";
             system_config('wheel_noise') = "on";
