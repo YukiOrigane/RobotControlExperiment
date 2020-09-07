@@ -1,6 +1,9 @@
-function simulation(field_id, controller_func, control_param)
+function simulation(field_id, controller_func, control_param, use_noise)
 
-clearvars -except field_id controller_func control_param   % 一旦ワークスペース内全変数を消去
+clearvars -except field_id controller_func control_param use_noise  % 一旦ワークスペース内全変数を消去
+clear PID_control
+clear checkRobotPosition
+clear robotSystem
 close all;
 
 if ~exist('field_id','var')    % 定義されてなければ代入
@@ -13,6 +16,10 @@ end
 
 if ~exist('control_param','var')
     control_param = [0.5 1];
+end
+
+if ~exist('use_noise','var')
+    use_noise = false;
 end
 
 % save_video_name = 'movie';
@@ -50,11 +57,14 @@ list_range_sensor = [100 0 0;];
 range_line_visible = 'off';
 is_light_sensor_visible = true;
 
-system_lebel = 1;   % システムのリアル度を変更
-% ----------------------------------------------------------
+if use_noise
+    system_level = 2;   % システムのリアル度を変更
+else
+    system_level = 1;
+end
 
 run("list_system_config.m");    % システム設定の読み込み
-system_config('initial_position_noise') = "off";
+% ----------------------------------------------------------
 
 if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定されているか
     init_state = field_init_state(field_id);
@@ -104,7 +114,7 @@ for k = wait_N:N
     if k > 0
         cond_string = "スタート";
         if mod(k,5) == 0    % 20Hz
-            value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
+            value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise, use_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
             % control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
             control_input = controller_func(t(k,1), delta_t, value_light_sensor, value_range_sensor, control_param);
@@ -153,12 +163,12 @@ end
 
 figure
 j = 1:k;
-line([1,k]*delta_t,[160,160], 'Color','g');
+line([1,k]*delta_t,[160,160], 'Color', 'g', 'LineWidth', 2);
 hold on
-plot(j.*delta_t, sum(z(1:k,1:17)/17, 2));
-legend("目標値","計測値")
-xlabel("時刻[s]")
-ylabel("センサ値")
+plot(j.*delta_t, sum(z(1:k,1:17)/17, 2), 'LineWidth', 2);
+legend("目標値","計測値", 'FontSize', 14, 'Location', 'southeast')
+xlabel("時刻 [s]", 'FontSize', 14)
+ylabel("センサ値", 'FontSize', 14)
 grid on
 
 if exist('save_video_name', 'var') == 1
