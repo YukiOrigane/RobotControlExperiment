@@ -7,11 +7,11 @@ if isempty(wheel_speed)
     wheel_speed = zeros(2,1);
 end
 
-for i = 1:2
-    if abs(u(i,1)) > 1.0
-        u(i,1) = sign(u(i,1)) * 1.0;
-    end
-end
+% for i = 1:2
+%     if abs(u(i,1)) > 1.0
+%         u(i,1) = sign(u(i,1)) * 1.0;
+%     end
+% end
 
 Kv = [1000 0; 0 1000];  % motor constant value
 if sysconf('wheel_noise') == "on"   % ホイール力にノイズを入れる
