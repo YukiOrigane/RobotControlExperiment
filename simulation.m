@@ -163,12 +163,12 @@ end
 
 figure
 j = 1:k;
-line([1,k]*delta_t,[160,160], 'Color','g');
+line([1,k]*delta_t,[160,160], 'Color', 'g', 'LineWidth', 2);
 hold on
-plot(j.*delta_t, sum(z(1:k,1:17)/17, 2));
-legend("目標値","計測値")
-xlabel("時刻[s]")
-ylabel("センサ値")
+plot(j.*delta_t, sum(z(1:k,1:17)/17, 2), 'LineWidth', 2);
+legend("目標値","計測値", 'FontSize', 14, 'Location', 'southeast')
+xlabel("時刻 [s]", 'FontSize', 14)
+ylabel("センサ値", 'FontSize', 14)
 grid on
 
 if exist('save_video_name', 'var') == 1
