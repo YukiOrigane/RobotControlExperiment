@@ -11,7 +11,7 @@ range_sensor_N = size(list_range_sensor,1);
 
 gpos_wheel = zeros(2, 5, 2);
 gpos_body  = R * [body; body(1,:)].' + state_robot(1:2,1)*ones(1,5);
-gpos_line  = R * list_light_sensor.' + state_robot(1:2,1)*ones(1,light_sensor_N);
+gpos_line  = R * list_light_sensor(9,:).' + state_robot(1:2,1)*ones(1,light_sensor_N);
 gpos_range = R * list_range_sensor.' + state_robot(1:2,1)*ones(1,range_sensor_N);
 gpos_body = gpos_body.';
 
@@ -26,9 +26,8 @@ for i = 1:2
 end
 
 if is_light_sensor_visible
-    for i = 1:light_sensor_N
-        light_sensor_points(i).Position = [gpos_line(1,i) gpos_line(2,i)];
-    end
+    light_sensor_points.XData = gpos_line(1,:);
+    light_sensor_points.YData = gpos_line(2,:);
 end
 
 for i = 1:range_sensor_N
