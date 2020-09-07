@@ -71,11 +71,12 @@ if isKey(field_init_state, field_id)  % 初期位置がフィールドで指定�
 end
 
 body_line = line;
+hold on
 wheel_line = [line, line];
 cond_string = "待機中";
 message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);
-light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), '〇', 'Color','red', 'Fontsize', 8);
-range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
+light_sensor_points = scatter(0,0,'CData',[0.9 0.1 0.1], 'MarkerFaceColor','red', 'SizeData', 80);
+range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), ' ', 'Color','magenta');
 for i = 1:size(list_range_sensor,1)
     range_sensor_line(i) = line;
     range_sensor_line(i).Visible = range_line_visible;
