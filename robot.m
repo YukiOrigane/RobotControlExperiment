@@ -1,13 +1,15 @@
 
-init_state = [200; 500; 0]; % ƒƒ{ƒbƒg‚Ì‰Šúó‘Ô [ posx; posy; theta ];
+init_state = [200; 500; 0]; % ãƒ­ãƒœãƒƒãƒˆã®åˆæœŸçŠ¶æ…‹ [ posx; posy; theta ];
 
-body = [100 150; -100 100; -100 -100; 100 -150];
-wheel = [0 125; 0 -125];
+body = [100 80; -100 80; -100 -80; 100 -80];
+wheel = [0 90; 0 -90];
 
-list_light_sensor = [100 0; 0 0];
+list_light_sensor = ones(2,5)*100;
+list_light_sensor(2,:) = 0:10:40;   % ã‚»ãƒ³ã‚µ5ã¤
+list_light_sensor = list_light_sensor.';
 list_range_sensor = [100 0 0;];
 
 range_line_visible = 'off';
-light_sensor_visible = "on";
+is_light_sensor_visible = true;
 
-system_lebel = 1;   % ƒVƒXƒeƒ€‚ÌƒŠƒAƒ‹“x‚ğ•ÏX
+system_level = 1;   % ã‚·ã‚¹ãƒ†ãƒ ã®ãƒªã‚¢ãƒ«åº¦ã‚’å¤‰æ›´

@@ -1,15 +1,16 @@
 function makeVideo(file_name, M)
-    disp("“®‰æ‚Ìo—Í‚ğŠJn‚µ‚Ü‚·");
-    if isfolder('video') == 0
-        mkdir('video');
-    end
-    v = VideoWriter(strcat('video/',file_name), 'MPEG-4');
-    open(v);
-    for i = 1:1:size(M,2)
+disp("å‹•ç”»ã®å‡ºåŠ›ã‚’é–‹å§‹ã—ã¾ã™");
+if isfolder('video') == 0
+    mkdir('video');
+end
 
-            writeVideo(v,M(i));
+v = VideoWriter(strcat('video/', file_name), 'MPEG-4');
+open(v);
 
-    end
-    close(v);
-    disp("“®‰æ‚Ìo—Í‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+for i = 1:1:size(M,2)
+    writeVideo(v,M(i));
+end
+
+close(v);
+disp("å‹•ç”»ã®å‡ºåŠ›ãŒå®Œäº†ã—ã¾ã—ãŸ");
 end

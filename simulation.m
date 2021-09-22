@@ -1,34 +1,82 @@
-clear   % ˆê’Uƒ[ƒNƒXƒy[ƒX“à‘S•Ï”‚ðÁ‹Ž
+function simulation(field_id, controller_func, control_param, use_noise)
 
-field_number = '01';
+clearvars -except field_id controller_func control_param use_noise  % ä¸€æ—¦ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹å†…å…¨å¤‰æ•°ã‚’æ¶ˆåŽ»
+clear PID_control
+clear checkRobotPosition
+clear robotSystem
+close all;
+
+if ~exist('field_id','var')    % å®šç¾©ã•ã‚Œã¦ãªã‘ã‚Œã°ä»£å…¥
+    field_id = '01';
+end
+
+if ~exist('controller_func','var')
+    controller_func = @controllers.controller;
+end
+
+if ~exist('control_param','var')
+    control_param = [0.5 1];
+end
+
+if ~exist('use_noise','var')
+    use_noise = false;
+end
 
 % save_video_name = 'movie';
 
 run("fields/set_field_list.m");
-field_folder = field_list(field_number);
+field_folder = field_list(field_id);
 
 func.makeField(field_folder);
 
 load( strcat("fields/" , field_folder, "/", "field") );
 
-func.drawInit(field_size);
+figure;
+ax = gca;
+func.drawInit(ax, field_size);
 
-func.drawField(field_size, field_line, field_wall, finish_zone);
+func.drawField(ax, field_size, field_line, field_wall, finish_zone);
 field_line = field_line.';
 field_wall = field_wall.';
 
-light_sensor_visible = "on";    % ƒ‰ƒCƒgƒZƒ“ƒT•\Ž¦‚·‚é‚©”Û‚©
-% time_constant = 0.1;    % Žž’è”‚Ì‰ŠúÝ’è’l
-% viscocity = 0.0;    % ”S«‚Ì‰ŠúÝ’è’l
-run("robot.m");
-run("list_system_config.m");    % ƒVƒXƒeƒ€Ý’è‚Ì“Ç‚Ýž‚Ý
+is_light_sensor_visible = true;  % ãƒ©ã‚¤ãƒˆã‚»ãƒ³ã‚µè¡¨ç¤ºã™ã‚‹ã‹å¦ã‹
+% time_constant = 0.1;    % æ™‚å®šæ•°ã®åˆæœŸè¨­å®šå€¤
+viscocity = 0.1;    % ç²˜æ€§ã®åˆæœŸè¨­å®šå€¤
+
+% run("robot.m"); ------------------------------------------
+init_state = [200; 500; 0]; % ãƒ­ãƒœãƒƒãƒˆã®åˆæœŸçŠ¶æ…‹ [ posx; posy; theta ];
+
+body = [100 80; -100 80; -100 -80; 100 -80];
+wheel = [0 90; 0 -90];
+
+list_light_sensor = ones(2,17)*100;
+list_light_sensor(2,:) = 0:2.5:40;   % ã‚»ãƒ³ã‚µ17ã¤
+list_light_sensor = list_light_sensor.';
+list_range_sensor = [100 0 0;];
+
+range_line_visible = 'off';
+is_light_sensor_visible = true;
+
+if use_noise
+    system_level = 2;   % ã‚·ã‚¹ãƒ†ãƒ ã®ãƒªã‚¢ãƒ«åº¦ã‚’å¤‰æ›´
+else
+    system_level = 1;
+end
+
+run("list_system_config.m");    % ã‚·ã‚¹ãƒ†ãƒ è¨­å®šã®èª­ã¿è¾¼ã¿
+% ----------------------------------------------------------
+
+if isKey(field_init_state, field_id)  % åˆæœŸä½ç½®ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã‹
+    init_state = field_init_state(field_id);
+end
 
 body_line = line;
+hold on
 wheel_line = [line, line];
-cond_string = "‘Ò‹@’†";
+cond_string = "å¾…æ©Ÿä¸­";
 message = text(0, -30, strcat("T = ",string(0.0),"[s],  ",cond_string),'Fontsize',20);
-light_sensor_points = text(zeros(size(list_light_sensor,1),1), zeros(size(list_light_sensor,1),1), 'Z', 'Color','red', 'Fontsize', 8);
-range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), '*', 'Color','magenta');
+light_sensor_points = scatter(0,0,'CData',[0.9 0.1 0.1], 'MarkerFaceColor','red', 'SizeData', 80);
+range_sensor_points = text(zeros(size(list_range_sensor,1),1), zeros(size(list_range_sensor,1),1), ' ', 'Color','magenta');
 for i = 1:size(list_range_sensor,1)
     range_sensor_line(i) = line;
     range_sensor_line(i).Visible = range_line_visible;
@@ -38,12 +86,18 @@ end
 
 range_detect_points = zeros(2, size(list_range_sensor,1));
 
-state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
+if system_config('initial_position_noise') == "on"
+    state_robot = init_state + [10*(rand-0.5); 10*(rand-0.5); 10/360*2*pi*(rand-0.5)];
+else
+    state_robot = init_state;
+end
+
 environmental_light_noise = 40 * (rand-0.5);
 
 delta_t = 0.01;
-wait_N = -50;  % ŠJŽn‚Ü‚Å‚ÌŽžŠÔ
-N = 18000;       % ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“Å‘åŽžŠÔ 3min
+wait_N = -50;  % é–‹å§‹ã¾ã§ã®æ™‚é–“
+% N = 18000;       % ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æœ€å¤§æ™‚é–“ 3min
+N = 3000;
 t = 0:delta_t:delta_t*(N-1);
 t = t.';
 q = zeros(N, 3);
@@ -52,16 +106,19 @@ z = zeros(N, size(list_light_sensor,1)+size(list_range_sensor,1));
 control_input = [0.0;0.0];    % dutyR, dutyL (-1.0 ~ +1.0, duty rate
 value_light_sensor = zeros(size(list_light_sensor,1),1);
 value_range_sensor = zeros(size(list_range_sensor,1),1);
-simulation_cond = 1;    % ŽÀs
+simulation_cond = 1;    % å®Ÿè¡Œ
+global stop_call
+stop_call = false;
 movie_k = 0;
 
-for k = wait_N:1:N
-    if k>0
-        cond_string = "ƒXƒ^[ƒg";
+for k = wait_N:N
+    if k > 0
+        cond_string = "ã‚¹ã‚¿ãƒ¼ãƒˆ";
         if mod(k,5) == 0    % 20Hz
-            value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise);
+            value_light_sensor = func.getLightSensor(state_robot, list_light_sensor, field_line, environmental_light_noise, use_noise);
             [value_range_sensor, range_detect_points] = func.getRangeSensor(state_robot, list_range_sensor, field_wall);
-            control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
+            % control_input = controller(t(k,1), delta_t, value_light_sensor, value_range_sensor);
+            control_input = controller_func(t(k,1), delta_t, value_light_sensor, value_range_sensor, control_param);
         end
         q(k,:) = state_robot;
         u(k,:) = control_input;
@@ -75,13 +132,13 @@ for k = wait_N:1:N
     state_robot = func.robotSystem(state_robot, control_input, wheel, delta_t, system_config);
     
     simulation_cond = simulation_cond * func.checkRobotPosition(state_robot, body, field_size, field_wall, finish_zone);
-    if simulation_cond<0    % ‰½‚ç‚©‚ÌI—¹Œ´ˆö‚ª¶‚¶‚½
-        cond_string = "I—¹";
+    if simulation_cond < 0    % ä½•ã‚‰ã‹ã®çµ‚äº†åŽŸå› ãŒç”Ÿã˜ãŸ
+        cond_string = "çµ‚äº†";
     end
-    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, light_sensor_visible);
-    message.String = strcat("T = ",num2str(k*delta_t,'%3.2f'),"[s],  ", cond_string);
+    func.drawRobot(state_robot, body, body_line, wheel, wheel_line, list_light_sensor, light_sensor_points, list_range_sensor(:,1:2), range_sensor_points, range_detect_points, range_sensor_line, is_light_sensor_visible);
+    message.String = strcat("T = ", num2str(k*delta_t, '%3.2f'), "[s], ", cond_string);
     
-    if exist('save_video_name', 'var') == 1  % movieì¬
+    if exist('save_video_name', 'var') == 1  % movieä½œæˆ
         if mod(k,4) == 1
             movie_k = movie_k + 1;
             Movie(movie_k) = getframe(gcf);
@@ -90,27 +147,33 @@ for k = wait_N:1:N
         pause(delta_t/2);
     end
     drawnow limitrate
+    pause(0.001);
     
-    if simulation_cond<0    % ‰½‚ç‚©‚ÌI—¹Œ´ˆö‚ª¶‚¶‚½
+    if simulation_cond < 0 || stop_call  % ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘å‡ºã™
         break;
     end
-    
 end
 
-clear controller % for clear perisistent variable
+clear PID_control
 clear checkRobotPosition
 clear robotSystem
 
 if simulation_cond == 1
-    disp("ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŽžŠÔ‚ªI—¹‚µ‚Ü‚µ‚½");
+    disp("ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ™‚é–“ãŒçµ‚äº†ã—ã¾ã—ãŸ");
 end
 
-% figure
-% j = 1:k;
-% plot(j, q(1:k,2));
-% grid on
+figure
+j = 1:k;
+line([1,k]*delta_t,[160,160], 'Color', 'g', 'LineWidth', 2);
+hold on
+plot(j.*delta_t, sum(z(1:k,1:17)/17, 2), 'LineWidth', 2);
+legend("ç›®æ¨™å€¤","è¨ˆæ¸¬å€¤", 'FontSize', 14, 'Location', 'southeast')
+xlabel("æ™‚åˆ» [s]", 'FontSize', 14)
+ylabel("ã‚»ãƒ³ã‚µå€¤", 'FontSize', 14)
+grid on
 
 if exist('save_video_name', 'var') == 1
     func.makeVideo(save_video_name, Movie);
 end
 
+end

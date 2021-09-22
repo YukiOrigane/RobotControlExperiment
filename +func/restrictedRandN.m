@@ -1,12 +1,12 @@
-% ”ÍˆÍ§ŒÀ•t‚«³‹K•ª•z‚ğ•Ô‚·
-% @oaram nu : •½‹Ï’l
-% @param sigmaF•W€•Î·
-% @range ”ÍˆÍ‚ğ-range ~ range‚É§ŒÀ
+% ç¯„å›²åˆ¶é™ä»˜ãæ­£è¦åˆ†å¸ƒã‚’è¿”ã™
+% @oaram nu : å¹³å‡å€¤
+% @param sigmaï¼šæ¨™æº–åå·®
+% @range ç¯„å›²ã‚’-range ~ rangeã«åˆ¶é™
 function y = restrictedRandN(nu, sigma, range)
-    while 1
-        y = sigma*randn + nu;
-        if abs(y-nu)<=range
-            break;
-        end
+while 1
+    y = sigma * randn + nu;
+    if abs(y-nu) <= range
+        break;
     end
+end
 end

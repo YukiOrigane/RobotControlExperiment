@@ -1,38 +1,40 @@
 function check = checkRobotPosition(q, body, field_size, wall, finish_zone)
-    check = 1;
-    theta = q(3,1);
-    persistent pre_q;
-    if isempty(pre_q)
-        pre_q = [0; 0; 0];
+check = 1;
+theta = q(3,1);
+persistent pre_q;
+if isempty(pre_q)
+    pre_q = [0; 0; 0];
+end
+in_finish_zone = 0;
+gpos_point = round( [cos(theta) -sin(theta); sin(theta) cos(theta)] * [body; body(1,:)].' + q(1:2,1)*ones(1,5) );
+gpos_point(:,5) = round( q(1:2,1) );
+
+for i = 1:5
+    x = gpos_point(1,i);
+    y = gpos_point(2,i);
+    if x < 1 || y < 1 || x > field_size(1,1) || y > field_size(1,2)
+        check = -1;
+        disp("ãƒ­ãƒœãƒƒãƒˆãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å¤–ã«å‡ºã¾ã—ãŸ");
+        break
+    elseif wall(x,y) == 1
+        check = -1;
+        disp("ãƒ­ãƒœãƒƒãƒˆãŒå£ã«è¡çªã—ã¾ã—ãŸ");
+        break;
     end
-    in_finish_zone = 0;
-    gpos_point = round( [cos(theta) -sin(theta); sin(theta) cos(theta)] * [body; body(1,:)].' + q(1:2,1)*ones(1,5) );
-    gpos_point(:,5) = round( q(1:2,1) );
-    for i=1:5
-        x = gpos_point(1,i);
-        y = gpos_point(2,i);
-        if x<1 || y<1 || x>field_size(1,1) || y>field_size(1,2)
-            check = -1;
-            disp("ƒƒ{ƒbƒg‚ªƒtƒB[ƒ‹ƒhŠO‚Éo‚Ü‚µ‚½");
-            break
-        end
-        if wall(x,y) == 1
-            check = -1;
-            disp("ƒƒ{ƒbƒg‚ª•Ç‚ÉÕ“Ë‚µ‚Ü‚µ‚½");
-            break;
-        end
-        if vecnorm( [x;y]-finish_zone(1:2,1) ) < finish_zone(3,1)
-            in_finish_zone = in_finish_zone + 1;
-        end
+    
+    if vecnorm([x;y] - finish_zone(1:2,1)) < finish_zone(3,1)
+        in_finish_zone = in_finish_zone + 1;
     end
-    if in_finish_zone == 5
-        if finish_zone(4,1) == 0    % N“ü‚ÅOK
-            disp("ƒƒ{ƒbƒg‚ªI—¹ƒGƒŠƒA‚É“ü‚è‚Ü‚µ‚½");
-            check = -1;
-        elseif pre_q == q           % Ã~‚ğ—v‹
-            disp("ƒƒ{ƒbƒg‚ªI—¹ƒGƒŠƒA‚Å’â~‚µ‚Ü‚µ‚½");
-            check = -1;
-        end
-        pre_q = q;
+end
+
+if in_finish_zone == 5
+    if finish_zone(4,1) == 0    % ä¾µå…¥ã§OK
+        disp("ãƒ­ãƒœãƒƒãƒˆãŒçµ‚äº†ã‚¨ãƒªã‚¢ã«å…¥ã‚Šã¾ã—ãŸ");
+        check = -1;
+    elseif pre_q == q           % é™æ­¢ã‚’è¦æ±‚
+        disp("ãƒ­ãƒœãƒƒãƒˆãŒçµ‚äº†ã‚¨ãƒªã‚¢ã§åœæ­¢ã—ã¾ã—ãŸ");
+        check = -1;
     end
+    pre_q = q;
+end
 end
